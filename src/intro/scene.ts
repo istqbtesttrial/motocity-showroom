@@ -82,10 +82,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = options.mobile ? 1.08 : 1.1
-  renderer.setClearColor(0x141717, 0)
+  renderer.setClearColor(0x000000, 0)
 
   const scene = new THREE.Scene()
-  const fog = new THREE.FogExp2(0x8c9492, options.mobile ? 0.018 : 0.015)
+  const fog = new THREE.FogExp2(0x050805, options.mobile ? 0.022 : 0.018)
   scene.fog = fog
 
   const camera = new THREE.PerspectiveCamera(options.mobile ? 34 : 30, width / height, 0.1, 80)
@@ -94,12 +94,12 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(options.mobile ? 10 : 13, options.mobile ? 56 : 88),
     new THREE.MeshPhysicalMaterial({
-      color: 0x5c6462,
-      roughness: 0.14,
-      metalness: 0.08,
-      reflectivity: 0.44,
-      clearcoat: 0.56,
-      clearcoatRoughness: 0.24,
+      color: 0x101711,
+      roughness: 0.18,
+      metalness: 0.1,
+      reflectivity: 0.38,
+      clearcoat: 0.48,
+      clearcoatRoughness: 0.28,
     }),
   )
   floor.rotation.x = -Math.PI / 2
@@ -107,8 +107,8 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   scene.add(floor)
 
   const floorReflection = new THREE.Mesh(
-    new THREE.CircleGeometry(options.mobile ? 2.6 : 3.8, 72),
-    new THREE.MeshBasicMaterial({ color: 0xf0d98b, transparent: true, opacity: 0.04 }),
+    new THREE.CircleGeometry(options.mobile ? 2.8 : 4.2, 72),
+    new THREE.MeshBasicMaterial({ color: 0xe3c46f, transparent: true, opacity: 0.035 }),
   )
   floorReflection.rotation.x = -Math.PI / 2
   floorReflection.position.set(options.mobile ? 0 : -1.45, -1.335, 0.2)
@@ -116,13 +116,40 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   const backdrop = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 10),
-    new THREE.MeshBasicMaterial({ color: 0xb8c0bd, transparent: true, opacity: 1 }),
+    new THREE.ShaderMaterial({
+      uniforms: {
+        uInner: { value: new THREE.Color(0x0f1f17) },
+        uMid: { value: new THREE.Color(0x050805) },
+        uOuter: { value: new THREE.Color(0x000000) },
+      },
+      depthWrite: false,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform vec3 uInner;
+        uniform vec3 uMid;
+        uniform vec3 uOuter;
+        void main() {
+          vec2 p = vUv - 0.5;
+          float d = length(vec2(p.x * 0.95, p.y * 1.15));
+          vec3 color = mix(uInner, uMid, smoothstep(0.0, 0.58, d));
+          color = mix(color, uOuter, smoothstep(0.52, 0.96, d));
+          gl_FragColor = vec4(color, 1.0);
+        }
+      `,
+    }),
   )
   backdrop.position.set(0, 1.2, -6.4)
   scene.add(backdrop)
 
   const halo = new THREE.Mesh(
-    new THREE.PlaneGeometry(options.mobile ? 5 : 6.8, options.mobile ? 4 : 5),
+    new THREE.PlaneGeometry(options.mobile ? 5.8 : 7.4, options.mobile ? 4.6 : 5.6),
     new THREE.ShaderMaterial({
       uniforms: {
         uColor: { value: new THREE.Color(0xf1dd99) },
@@ -247,7 +274,6 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const render = () => {
     if (disposed) return
 
-    const blackOpening = clamp(progress / 0.14, 0, 1)
     const roomReveal = clamp((progress - 0.14) / 0.2, 0, 1)
     const scooterReveal = clamp((progress - 0.34) / 0.24, 0, 1)
     const logoReveal = clamp((progress - 0.58) / 0.2, 0, 1)
@@ -273,8 +299,8 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     rimLight.intensity = THREE.MathUtils.lerp(0.1, options.mobile ? 0.64 : 0.74, scooterReveal)
     scooterLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6 : 7, scooterReveal)
 
-    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.04, 0.16, logoReveal)
-    floorReflection.material.opacity = THREE.MathUtils.lerp(0.01, 0.08, holdReveal)
+    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.03, 0.18, logoReveal)
+    floorReflection.material.opacity = THREE.MathUtils.lerp(0.008, 0.065, holdReveal)
 
     scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.38 : 3.45, options.mobile ? 0.08 : 2.95, scooterReveal)
     scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.18 : 0.22, options.mobile ? -0.08 : 0.04, scooterReveal)
@@ -284,7 +310,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
     sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.6 : -2.4, options.mobile ? 0.7 : -0.4, logoReveal)
 
-    backdrop.material.opacity = THREE.MathUtils.lerp(1, 0.92, blackOpening)
+    
     vignette.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.2, 0.12, holdReveal)
 
     renderer.render(scene, camera)
