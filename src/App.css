@@ -50,9 +50,9 @@
 .intro-overlay {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
-  text-align: center;
+  text-align: left;
   padding: clamp(28px, 5vw, 54px);
   padding-bottom: clamp(56px, 8vw, 88px);
   background: linear-gradient(180deg, rgba(2, 3, 5, 0.02) 0%, rgba(2, 3, 5, 0.02) 44%, rgba(2, 3, 5, 0.16) 70%, rgba(2, 3, 5, 0.52) 100%);
@@ -71,7 +71,7 @@
   position: relative;
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 22px;
 }
 
@@ -115,7 +115,7 @@
 .intro-kicker {
   margin-bottom: 12px;
   color: rgba(234, 225, 194, 0.66);
-  letter-spacing: 0.32em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: 0.68rem;
   font-weight: 600;
@@ -810,7 +810,13 @@ h3 { font-size: 1.35rem; }
   }
 
   .intro-overlay {
+    align-items: center;
+    text-align: center;
     padding-bottom: 76px;
+  }
+
+  .intro-logo-shell {
+    justify-content: center;
   }
 
   .intro-logo-badge {
@@ -818,7 +824,7 @@ h3 { font-size: 1.35rem; }
   }
 
   .intro-kicker {
-    letter-spacing: 0.28em;
+    letter-spacing: 0.24em;
     font-size: 0.66rem;
   }
 

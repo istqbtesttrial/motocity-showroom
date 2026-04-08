@@ -54,9 +54,11 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     const state = { progress: 0 }
 
     timeline
-      .to(state, { progress: 0.16, duration: device.mobile ? 0.78 : 0.9, ease: 'power1.out' })
-      .to(state, { progress: 0.72, duration: device.mobile ? 1.95 : 2.25, ease: 'power2.inOut' })
-      .to(state, { progress: 1, duration: device.mobile ? 0.92 : 1.05, ease: 'power2.out' })
+      .to(state, { progress: 0.16, duration: 1.5, ease: 'power1.out' })
+      .to(state, { progress: 0.38, duration: 2, ease: 'power2.inOut' })
+      .to(state, { progress: 0.6, duration: 2, ease: 'power2.inOut' })
+      .to(state, { progress: 0.78, duration: 2, ease: 'power2.inOut' })
+      .to(state, { progress: 1, duration: 1.6, ease: 'power2.out' })
 
     const renderLoop = () => {
       scene.updateProgress(state.progress)
@@ -70,13 +72,13 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     const textTl = gsap.timeline()
     if (content) {
       textTl
-        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.62, duration: 0.6, ease: 'power2.out', delay: 3.05 })
-        .fromTo('.intro-logo-shell', { y: 18, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, '-=0.05')
-        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.5, duration: 1.05, ease: 'power2.inOut' }, '+=0.08')
-        .fromTo('.intro-brand', { y: 14, opacity: 0, letterSpacing: '0.24em' }, { y: 0, opacity: 1, letterSpacing: '0.18em', duration: 0.95, ease: 'power3.out' }, '-=0.5')
-        .fromTo('.intro-divider', { scaleX: 0.6, opacity: 0 }, { scaleX: 1, opacity: 0.58, duration: 0.7, ease: 'power2.out' }, '-=0.55')
-        .fromTo('.intro-subcopy', { y: 10, opacity: 0 }, { y: 0, opacity: 0.72, duration: 0.82, ease: 'power2.out' }, '-=0.35')
-        .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.8 }, '-=0.48')
+        .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.8, delay: 0.8 })
+        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.6, duration: 0.7, ease: 'power2.out', delay: 5.3 })
+        .fromTo('.intro-logo-shell', { y: 18, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 1.3, ease: 'power3.out' }, '-=0.05')
+        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.46, duration: 1.1, ease: 'power2.inOut' }, '+=0.1')
+        .fromTo('.intro-brand', { y: 14, opacity: 0, letterSpacing: '0.22em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 1, ease: 'power3.out' }, '-=0.55')
+        .fromTo('.intro-divider', { scaleX: 0.6, opacity: 0 }, { scaleX: 1, opacity: 0.56, duration: 0.7, ease: 'power2.out' }, '-=0.6')
+        .fromTo('.intro-subcopy', { y: 10, opacity: 0 }, { y: 0, opacity: 0.72, duration: 0.9, ease: 'power2.out' }, '-=0.32')
     }
 
     const handleResize = () => scene.resize()
@@ -165,7 +167,7 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
       )}
 
       <div className="intro-overlay">
-        <p className="intro-kicker">Silent luxury reveal</p>
+        <p className="intro-kicker">Showroom opening sequence</p>
         <div className="intro-logo-shell">
           <div className="intro-logo-badge">
             <img src={motoCityLogo} alt="MotoCity" className="intro-logo-image" />
@@ -174,7 +176,7 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
         </div>
         <h1 className="intro-brand">MotoCity</h1>
         <div className="intro-divider" aria-hidden="true" />
-        <p className="intro-subcopy">La scène s’ouvre dans le noir, laisse émerger une silhouette de scooter, puis révèle le badge MotoCity avec une retenue premium.</p>
+        <p className="intro-subcopy">Le badge MotoCity prend le premier plan pendant qu’une silhouette de scooter, posée à côté, s’installe dans une lumière showroom douce et maîtrisée.</p>
       </div>
 
       <button type="button" className="intro-skip" onClick={handleSkip} aria-label="Passer l’introduction">
