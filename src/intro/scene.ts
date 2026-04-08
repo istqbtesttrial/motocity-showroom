@@ -20,35 +20,35 @@ const clamp = (value: number, min: number, max: number) => Math.min(max, Math.ma
 function buildSvgScooter(svgText: string, options: IntroSceneOptions) {
   const loader = new SVGLoader()
   const data = loader.parse(svgText)
+  const wrapper = new THREE.Group()
   const group = new THREE.Group()
-  const material = new THREE.MeshPhysicalMaterial({
-    color: 0x3e4648,
-    metalness: 0.08,
-    roughness: 0.58,
-    clearcoat: 0.16,
-    clearcoatRoughness: 0.82,
-    side: THREE.DoubleSide,
-  })
-  const rimMaterial = new THREE.MeshBasicMaterial({
-    color: 0xf2f0e8,
+  wrapper.add(group)
+
+  const meshMaterial = new THREE.MeshBasicMaterial({
+    color: 0x2f3738,
     transparent: true,
-    opacity: options.mobile ? 0.22 : 0.28,
+    opacity: 0.96,
     side: THREE.DoubleSide,
   })
+  const edgeMaterials: THREE.Material[] = []
+  let shapeCount = 0
 
   data.paths.forEach((path) => {
     const shapes = SVGLoader.createShapes(path)
     shapes.forEach((shape) => {
       const geometry = new THREE.ShapeGeometry(shape)
-      const mesh = new THREE.Mesh(geometry, material)
+      const mesh = new THREE.Mesh(geometry, meshMaterial)
       group.add(mesh)
+      shapeCount += 1
 
-      const edgeGeometry = new THREE.EdgesGeometry(geometry, 28)
-      const edgeLines = new THREE.LineSegments(edgeGeometry, new THREE.LineBasicMaterial({
-        color: 0xf2ebd7,
+      const edgeMaterial = new THREE.LineBasicMaterial({
+        color: 0xf7f3e7,
         transparent: true,
-        opacity: options.mobile ? 0.12 : 0.16,
-      }))
+        opacity: options.mobile ? 0.18 : 0.22,
+      })
+      edgeMaterials.push(edgeMaterial)
+      const edgeGeometry = new THREE.EdgesGeometry(geometry, 24)
+      const edgeLines = new THREE.LineSegments(edgeGeometry, edgeMaterial)
       group.add(edgeLines)
     })
   })
@@ -56,31 +56,35 @@ function buildSvgScooter(svgText: string, options: IntroSceneOptions) {
   const box = new THREE.Box3().setFromObject(group)
   const size = box.getSize(new THREE.Vector3())
   const center = box.getCenter(new THREE.Vector3())
-  group.position.sub(center)
+  group.position.set(-center.x, -center.y, 0)
 
-  const scale = options.mobile ? 0.0115 : 0.0105
-  group.scale.set(scale, -scale, scale)
+  const targetWidth = options.mobile ? 4.4 : 4.8
+  const fitScale = targetWidth / Math.max(size.x, 1)
+  wrapper.scale.set(fitScale, -fitScale, 1)
 
   const rim = new THREE.Mesh(
-    new THREE.PlaneGeometry(size.x * scale * 1.06, size.y * scale * 1.04),
-    rimMaterial,
+    new THREE.PlaneGeometry(Math.max(size.x * fitScale * 1.02, 0.1), Math.max(size.y * fitScale * 1.02, 0.1)),
+    new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: options.mobile ? 0.06 : 0.08,
+      side: THREE.DoubleSide,
+    }),
   )
-  rim.position.set(0.05, 0.02, -0.02)
-  group.add(rim)
+  rim.position.set(0.04, 0.02, -0.01)
+  wrapper.add(rim)
+
+  wrapper.position.set(0, options.mobile ? -0.55 : -0.6, 0)
 
   return {
-    group,
+    group: wrapper,
     dispose: () => {
-      material.dispose()
-      rimMaterial.dispose()
+      meshMaterial.dispose()
+      rim.material.dispose()
+      edgeMaterials.forEach((material) => material.dispose())
       group.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
+        if (child instanceof THREE.Mesh || child instanceof THREE.LineSegments) {
           child.geometry.dispose()
-        }
-        if (child instanceof THREE.LineSegments) {
-          child.geometry.dispose()
-          if (Array.isArray(child.material)) child.material.forEach((m) => m.dispose())
-          else child.material.dispose()
         }
       })
     },
@@ -242,7 +246,6 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
       if (disposed) return
       svgScene = buildSvgScooter(svgText, options)
       scooterAnchor.add(svgScene.group)
-      svgScene.group.position.set(0, 0, 0)
     })
     .catch(() => undefined)
 
