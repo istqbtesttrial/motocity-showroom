@@ -18,8 +18,8 @@
   z-index: 9999;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 18%, rgba(231, 205, 116, 0.12), transparent 26%),
-    linear-gradient(180deg, #c7cdcb 0%, #aeb7b4 52%, #9ca6a2 100%);
+    radial-gradient(circle at 50% 16%, rgba(231, 205, 116, 0.16), transparent 24%),
+    linear-gradient(180deg, #f4f1eb 0%, #e4ddd3 54%, #d3ccc2 100%);
 }
 
 .intro-experience.is-exiting {
@@ -36,9 +36,9 @@
 
 .intro-blackframe {
   background:
-    radial-gradient(circle at 50% 24%, rgba(255, 244, 214, 0.1), transparent 30%),
-    linear-gradient(180deg, rgba(34, 40, 40, 0.04), rgba(34, 40, 40, 0.1));
-  opacity: 0.76;
+    radial-gradient(circle at 50% 20%, rgba(255, 249, 232, 0.3), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(32, 28, 20, 0.08));
+  opacity: 0.58;
 }
 
 .intro-canvas-shell canvas {
@@ -89,8 +89,10 @@
   width: 100%;
   height: auto;
   display: block;
-  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.45));
-  opacity: 0.92;
+  filter:
+    drop-shadow(0 34px 56px rgba(0, 0, 0, 0.24))
+    drop-shadow(-6px 0 10px rgba(255, 255, 255, 0.18));
+  opacity: 0.98;
 }
 
 .intro-scooter-overlay::before {
@@ -105,7 +107,9 @@
 .intro-scooter-glow {
   position: absolute;
   inset: 8% 4% 12% 8%;
-  background: radial-gradient(circle at 46% 52%, rgba(255, 245, 220, 0.16), transparent 56%);
+  background:
+    radial-gradient(circle at 36% 40%, rgba(255, 255, 255, 0.22), transparent 36%),
+    radial-gradient(circle at 54% 58%, rgba(214, 187, 115, 0.12), transparent 56%);
   filter: blur(18px);
   mix-blend-mode: screen;
 }
@@ -180,15 +184,15 @@
   line-height: 0.96;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
   color: #fffdf7;
-  text-shadow: 0 10px 28px rgba(60, 60, 60, 0.18);
+  text-shadow: 0 12px 30px rgba(60, 52, 34, 0.18);
 }
 
 .intro-subcopy {
   margin-top: 18px;
   max-width: 520px;
-  color: rgba(58, 67, 64, 0.88);
+  color: rgba(66, 62, 54, 0.9);
   font-size: clamp(0.98rem, 1.4vw, 1.06rem);
   line-height: 1.7;
 }

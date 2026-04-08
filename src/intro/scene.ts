@@ -28,7 +28,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   renderer.setClearColor(0x000000, 0)
 
   const scene = new THREE.Scene()
-  const fog = new THREE.FogExp2(0x050805, options.mobile ? 0.022 : 0.018)
+  const fog = new THREE.FogExp2(0xded7cd, options.mobile ? 0.02 : 0.016)
   scene.fog = fog
 
   const camera = new THREE.PerspectiveCamera(options.mobile ? 34 : 30, width / height, 0.1, 80)
@@ -37,12 +37,12 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(options.mobile ? 11 : 15, options.mobile ? 64 : 96),
     new THREE.MeshPhysicalMaterial({
-      color: 0x0d130e,
-      roughness: 0.12,
-      metalness: 0.12,
-      reflectivity: 0.42,
-      clearcoat: 0.62,
-      clearcoatRoughness: 0.22,
+      color: 0xd8d0c5,
+      roughness: 0.18,
+      metalness: 0.08,
+      reflectivity: 0.36,
+      clearcoat: 0.52,
+      clearcoatRoughness: 0.28,
     }),
   )
   floor.rotation.x = -Math.PI / 2
@@ -51,7 +51,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   const floorReflection = new THREE.Mesh(
     new THREE.CircleGeometry(options.mobile ? 3.2 : 4.8, 72),
-    new THREE.MeshBasicMaterial({ color: 0xe0c06e, transparent: true, opacity: 0.028 }),
+    new THREE.MeshBasicMaterial({ color: 0x6f675d, transparent: true, opacity: 0.04 }),
   )
   floorReflection.rotation.x = -Math.PI / 2
   floorReflection.position.set(options.mobile ? 0 : -1.35, -1.375, 0.45)
@@ -59,7 +59,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   const floorTrack = new THREE.Mesh(
     new THREE.RingGeometry(options.mobile ? 2.8 : 3.8, options.mobile ? 4.6 : 6.4, 96),
-    new THREE.MeshBasicMaterial({ color: 0x193224, transparent: true, opacity: 0.16, side: THREE.DoubleSide }),
+    new THREE.MeshBasicMaterial({ color: 0xbcae8d, transparent: true, opacity: 0.16, side: THREE.DoubleSide }),
   )
   floorTrack.rotation.x = -Math.PI / 2
   floorTrack.position.set(0, -1.374, -0.1)
@@ -69,9 +69,9 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     new THREE.PlaneGeometry(20, 10),
     new THREE.ShaderMaterial({
       uniforms: {
-        uInner: { value: new THREE.Color(0x0f1f17) },
-        uMid: { value: new THREE.Color(0x050805) },
-        uOuter: { value: new THREE.Color(0x000000) },
+        uInner: { value: new THREE.Color(0xf1ece4) },
+        uMid: { value: new THREE.Color(0xdbd3c8) },
+        uOuter: { value: new THREE.Color(0xc8c0b5) },
       },
       depthWrite: false,
       vertexShader: `
@@ -103,8 +103,8 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     new THREE.PlaneGeometry(options.mobile ? 5.8 : 7.4, options.mobile ? 4.6 : 5.6),
     new THREE.ShaderMaterial({
       uniforms: {
-        uColor: { value: new THREE.Color(0xf1dd99) },
-        uOpacity: { value: 0.04 },
+        uColor: { value: new THREE.Color(0xe7cf7b) },
+        uOpacity: { value: 0.05 },
       },
       transparent: true,
       depthWrite: false,
@@ -135,24 +135,24 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   scooterAnchor.rotation.y = options.mobile ? -0.02 : -0.08
   scene.add(scooterAnchor)
 
-  const ambient = new THREE.AmbientLight(0xffffff, 0.1)
+  const ambient = new THREE.AmbientLight(0xffffff, 0.28)
   scene.add(ambient)
 
-  const hemi = new THREE.HemisphereLight(0xffffff, 0x7c8784, options.mobile ? 0.48 : 0.58)
+  const hemi = new THREE.HemisphereLight(0xffffff, 0xb7afa4, options.mobile ? 0.62 : 0.74)
   hemi.position.set(0, 4, 0)
   scene.add(hemi)
 
-  const keyLight = new THREE.SpotLight(0xfff0c4, options.mobile ? 6.2 : 7.8, 26, 0.28, 0.82, 1.05)
+  const keyLight = new THREE.SpotLight(0xfff8ea, options.mobile ? 7.2 : 8.8, 26, 0.28, 0.82, 1.05)
   keyLight.position.set(-3.4, 4.2, 5.4)
   keyLight.target.position.set(options.mobile ? 0 : -1.15, 0.42, -0.4)
   scene.add(keyLight)
   scene.add(keyLight.target)
 
-  const rimLight = new THREE.DirectionalLight(0xf9f4e3, options.mobile ? 0.72 : 0.95)
+  const rimLight = new THREE.DirectionalLight(0xffffff, options.mobile ? 0.9 : 1.16)
   rimLight.position.set(4.8, 2.4, 2.8)
   scene.add(rimLight)
 
-  const scooterLight = new THREE.SpotLight(0xf3f7f4, options.mobile ? 6.2 : 7.8, 24, 0.32, 0.82, 1.1)
+  const scooterLight = new THREE.SpotLight(0xffffff, options.mobile ? 7.2 : 8.6, 24, 0.32, 0.82, 1.1)
   scooterLight.position.set(options.mobile ? 1.7 : 5.6, 2.5, 3.8)
   scooterLight.target = scooterAnchor
   scene.add(scooterLight)

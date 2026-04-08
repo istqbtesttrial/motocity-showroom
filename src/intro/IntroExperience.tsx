@@ -74,7 +74,7 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
       textTl
         .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.6, delay: 0.45 })
         .fromTo('.intro-scooter-overlay', { x: -140, y: 20, opacity: 0, scale: 0.34, rotation: -4, filter: 'blur(18px)' }, { x: 0, y: 0, opacity: 0.98, scale: 1, rotation: 0, filter: 'blur(0px)', duration: 3.4, ease: 'power3.out', delay: 0.9 }, 0)
-        .fromTo('.intro-brand-block', { x: 42, opacity: 0 }, { x: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }, '+=1.95')
+        .fromTo('.intro-brand-block', { x: 20, opacity: 0, scale: 0.98 }, { x: 0, opacity: 1, scale: 1, duration: 1.25, ease: 'power3.out' }, '+=1.75')
         .fromTo('.intro-logo-shell', { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out' }, '-=0.75')
         .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.38, duration: 1.0, ease: 'power2.inOut' }, '-=0.08')
         .fromTo('.intro-brand', { y: 14, opacity: 0, letterSpacing: '0.24em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 0.9, ease: 'power3.out' }, '-=0.44')
