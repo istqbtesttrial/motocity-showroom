@@ -281,22 +281,22 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const render = () => {
     if (disposed) return
 
-    const blackOpening = clamp(progress / 0.16, 0, 1)
-    const roomReveal = clamp((progress - 0.16) / 0.22, 0, 1)
-    const scooterReveal = clamp((progress - 0.38) / 0.22, 0, 1)
-    const logoReveal = clamp((progress - 0.6) / 0.18, 0, 1)
+    const blackOpening = clamp(progress / 0.14, 0, 1)
+    const roomReveal = clamp((progress - 0.14) / 0.2, 0, 1)
+    const scooterReveal = clamp((progress - 0.34) / 0.24, 0, 1)
+    const logoReveal = clamp((progress - 0.58) / 0.2, 0, 1)
     const holdReveal = clamp((progress - 0.78) / 0.22, 0, 1)
 
     if (options.mobile) {
-      camera.position.x = Math.sin(progress * Math.PI) * 0.02
+      camera.position.x = Math.sin(progress * Math.PI) * 0.015
       camera.position.y = THREE.MathUtils.lerp(0.34, 0.5, holdReveal)
-      camera.position.z = THREE.MathUtils.lerp(11.2, 8.4, progress)
+      camera.position.z = THREE.MathUtils.lerp(11.2, 8.5, progress)
       camera.lookAt(0, THREE.MathUtils.lerp(0.44, 0.2, holdReveal), -0.45)
     } else {
-      camera.position.x = THREE.MathUtils.lerp(0.2, 0.04, holdReveal) + Math.sin(progress * Math.PI) * 0.03
+      camera.position.x = THREE.MathUtils.lerp(0.12, 0.02, holdReveal) + Math.sin(progress * Math.PI) * 0.02
       camera.position.y = THREE.MathUtils.lerp(0.56, 0.76, holdReveal)
-      camera.position.z = THREE.MathUtils.lerp(11.4, 8.6, progress)
-      camera.lookAt(-0.3, THREE.MathUtils.lerp(0.46, 0.22, holdReveal), -0.5)
+      camera.position.z = THREE.MathUtils.lerp(11.8, 8.9, progress)
+      camera.lookAt(-0.65, THREE.MathUtils.lerp(0.46, 0.22, holdReveal), -0.5)
     }
 
     fog.density = THREE.MathUtils.lerp(options.mobile ? 0.024 : 0.02, options.mobile ? 0.016 : 0.013, holdReveal)
@@ -311,11 +311,11 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     scooterShadow.material.opacity = THREE.MathUtils.lerp(0.04, 0.12, scooterReveal)
     scooterShadow.scale.setScalar(THREE.MathUtils.lerp(0.84, 1.02, scooterReveal))
 
-    scooterGroup.position.y = THREE.MathUtils.lerp(0.08, options.mobile ? -0.1 : -0.12, scooterReveal)
-    scooterGroup.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.16 : -0.3, options.mobile ? -0.05 : -0.18, holdReveal)
-    scooterGroup.scale.setScalar(THREE.MathUtils.lerp(0.94, 1.02, scooterReveal))
+    scooterGroup.position.y = THREE.MathUtils.lerp(0.08, options.mobile ? -0.08 : -0.02, scooterReveal)
+    scooterGroup.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.14 : -0.2, options.mobile ? -0.04 : -0.1, holdReveal)
+    scooterGroup.scale.setScalar(THREE.MathUtils.lerp(0.96, 1.04, scooterReveal))
 
-    edgeMaterial.opacity = THREE.MathUtils.lerp(0.02, options.mobile ? 0.24 : 0.32, scooterReveal)
+    edgeMaterial.opacity = THREE.MathUtils.lerp(0.04, options.mobile ? 0.3 : 0.38, scooterReveal)
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
     sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.8 : -2.8, options.mobile ? 0.8 : -0.5, logoReveal)
 

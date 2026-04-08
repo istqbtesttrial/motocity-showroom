@@ -54,11 +54,11 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     const state = { progress: 0 }
 
     timeline
-      .to(state, { progress: 0.16, duration: 1.5, ease: 'power1.out' })
-      .to(state, { progress: 0.38, duration: 2, ease: 'power2.inOut' })
-      .to(state, { progress: 0.6, duration: 2, ease: 'power2.inOut' })
-      .to(state, { progress: 0.78, duration: 2, ease: 'power2.inOut' })
-      .to(state, { progress: 1, duration: 1.6, ease: 'power2.out' })
+      .to(state, { progress: 0.14, duration: 1.8, ease: 'power1.out' })
+      .to(state, { progress: 0.34, duration: 2.2, ease: 'power2.inOut' })
+      .to(state, { progress: 0.58, duration: 2.2, ease: 'power2.inOut' })
+      .to(state, { progress: 0.8, duration: 2.2, ease: 'power2.inOut' })
+      .to(state, { progress: 1, duration: 2.1, ease: 'power2.out' })
 
     const renderLoop = () => {
       scene.updateProgress(state.progress)
@@ -73,7 +73,7 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     if (content) {
       textTl
         .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.8, delay: 0.8 })
-        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.6, duration: 0.7, ease: 'power2.out', delay: 5.3 })
+        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.6, duration: 0.7, ease: 'power2.out', delay: 5.8 })
         .fromTo('.intro-logo-shell', { y: 18, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 1.3, ease: 'power3.out' }, '-=0.05')
         .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.46, duration: 1.1, ease: 'power2.inOut' }, '+=0.1')
         .fromTo('.intro-brand', { y: 14, opacity: 0, letterSpacing: '0.22em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 1, ease: 'power3.out' }, '-=0.55')
