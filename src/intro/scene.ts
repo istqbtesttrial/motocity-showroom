@@ -112,50 +112,61 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.72, 2.15, 8, 24), silhouetteMaterial)
   body.rotation.z = Math.PI / 2
   body.scale.set(1.34, 0.48, 0.42)
-  body.position.set(-0.1, 0.02, 0)
+  body.position.set(options.mobile ? -0.02 : -0.1, 0.02, 0)
   scooterGroup.add(body)
 
   const frontShield = new THREE.Mesh(new THREE.SphereGeometry(0.72, 24, 24), silhouetteMaterial)
-  frontShield.scale.set(0.68, 1.3, 0.34)
-  frontShield.position.set(1.72, 0.42, 0)
+  frontShield.scale.set(options.mobile ? 0.78 : 0.68, options.mobile ? 1.44 : 1.3, 0.34)
+  frontShield.position.set(options.mobile ? 1.62 : 1.72, options.mobile ? 0.5 : 0.42, 0)
   scooterGroup.add(frontShield)
 
   const rearBody = new THREE.Mesh(new THREE.SphereGeometry(0.66, 24, 24), silhouetteMaterial)
-  rearBody.scale.set(1.1, 0.68, 0.34)
-  rearBody.position.set(-1.74, 0.1, 0)
+  rearBody.scale.set(options.mobile ? 1.18 : 1.1, options.mobile ? 0.76 : 0.68, 0.34)
+  rearBody.position.set(options.mobile ? -1.7 : -1.74, 0.1, 0)
   scooterGroup.add(rearBody)
 
   const seat = new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.16, 0.24), silhouetteMaterial)
-  seat.position.set(-0.46, 0.6, 0)
+  seat.position.set(options.mobile ? -0.36 : -0.46, options.mobile ? 0.66 : 0.6, 0)
   seat.rotation.z = -0.08
+  seat.scale.set(options.mobile ? 1.24 : 1, options.mobile ? 1.1 : 1, 1)
   scooterGroup.add(seat)
 
   const neck = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.86, 6, 12), silhouetteMaterial)
-  neck.position.set(0.86, 0.74, 0)
+  neck.position.set(options.mobile ? 0.8 : 0.86, options.mobile ? 0.82 : 0.74, 0)
   neck.rotation.z = -0.24
+  neck.scale.set(options.mobile ? 1.08 : 1, 1, 1)
   scooterGroup.add(neck)
 
   const handlebar = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.016, 10, 42, Math.PI), silhouetteMaterial)
   handlebar.rotation.z = Math.PI
-  handlebar.position.set(1.12, 1.08, 0)
+  handlebar.position.set(options.mobile ? 1.0 : 1.12, options.mobile ? 1.18 : 1.08, 0)
+  handlebar.scale.set(options.mobile ? 1.08 : 1, 1, 1)
   scooterGroup.add(handlebar)
 
   const leftMirror = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), silhouetteMaterial)
-  leftMirror.scale.set(1.2, 0.85, 0.4)
-  leftMirror.position.set(0.7, 1.3, 0.22)
+  leftMirror.scale.set(options.mobile ? 1.45 : 1.2, options.mobile ? 1 : 0.85, 0.4)
+  leftMirror.position.set(options.mobile ? 0.52 : 0.7, options.mobile ? 1.44 : 1.3, 0.26)
   scooterGroup.add(leftMirror)
   const rightMirror = leftMirror.clone()
-  rightMirror.position.z = -0.22
+  rightMirror.position.z = options.mobile ? -0.26 : -0.22
   scooterGroup.add(rightMirror)
 
   const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.08, 0.14), silhouetteMaterial)
-  windshield.position.set(1.34, 1.02, 0)
+  windshield.position.set(options.mobile ? 1.22 : 1.34, options.mobile ? 1.18 : 1.02, 0)
   windshield.rotation.z = 0.16
+  windshield.scale.set(options.mobile ? 1.14 : 1, options.mobile ? 1.12 : 1, 1)
   scooterGroup.add(windshield)
 
+  const topCase = new THREE.Mesh(new THREE.CapsuleGeometry(0.22, 0.54, 6, 12), silhouetteMaterial)
+  topCase.rotation.z = Math.PI / 2
+  topCase.position.set(options.mobile ? -1.98 : -1.94, options.mobile ? 1.02 : 0.92, 0)
+  topCase.scale.set(options.mobile ? 1.22 : 1.04, options.mobile ? 0.86 : 0.72, 0.72)
+  scooterGroup.add(topCase)
+
   const floorboard = new THREE.Mesh(new THREE.BoxGeometry(1.86, 0.08, 0.12), silhouetteMaterial)
-  floorboard.position.set(0.06, -0.4, 0)
+  floorboard.position.set(0.06, options.mobile ? -0.44 : -0.4, 0)
   floorboard.rotation.z = -0.03
+  floorboard.scale.set(options.mobile ? 1.08 : 1, 1, 1)
   scooterGroup.add(floorboard)
 
   const frontWheel = new THREE.Mesh(
@@ -163,10 +174,11 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     new THREE.MeshStandardMaterial({ color: 0x050606, metalness: 0.04, roughness: 0.78 }),
   )
   frontWheel.rotation.y = Math.PI / 2
-  frontWheel.position.set(1.42, -0.97, 0)
+  frontWheel.position.set(options.mobile ? 1.36 : 1.42, -0.97, 0)
+  frontWheel.scale.setScalar(options.mobile ? 1.08 : 1)
   scooterGroup.add(frontWheel)
   const rearWheel = frontWheel.clone()
-  rearWheel.position.set(-1.48, -0.97, 0)
+  rearWheel.position.set(options.mobile ? -1.54 : -1.48, -0.97, 0)
   scooterGroup.add(rearWheel)
 
   const upperEdge = new THREE.Mesh(
@@ -334,6 +346,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     handlebar.geometry.dispose()
     leftMirror.geometry.dispose()
     windshield.geometry.dispose()
+    topCase.geometry.dispose()
     floorboard.geometry.dispose()
     ;(frontWheel.geometry as THREE.BufferGeometry).dispose()
     ;(frontWheel.material as THREE.Material).dispose()
