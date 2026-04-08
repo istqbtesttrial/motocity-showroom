@@ -24,32 +24,31 @@ function buildSvgScooter(svgText: string, options: IntroSceneOptions) {
   const group = new THREE.Group()
   wrapper.add(group)
 
-  const meshMaterial = new THREE.MeshBasicMaterial({
-    color: 0x2f3738,
+  const fillMaterial = new THREE.MeshBasicMaterial({
+    color: 0x1a1f20,
     transparent: true,
-    opacity: 0.96,
+    opacity: 1,
+    side: THREE.DoubleSide,
+    depthWrite: true,
+  })
+  const shadowMaterial = new THREE.MeshBasicMaterial({
+    color: 0xded8c8,
+    transparent: true,
+    opacity: 0.08,
     side: THREE.DoubleSide,
   })
-  const edgeMaterials: THREE.Material[] = []
-  let shapeCount = 0
 
   data.paths.forEach((path) => {
     const shapes = SVGLoader.createShapes(path)
     shapes.forEach((shape) => {
       const geometry = new THREE.ShapeGeometry(shape)
-      const mesh = new THREE.Mesh(geometry, meshMaterial)
-      group.add(mesh)
-      shapeCount += 1
 
-      const edgeMaterial = new THREE.LineBasicMaterial({
-        color: 0xf7f3e7,
-        transparent: true,
-        opacity: options.mobile ? 0.18 : 0.22,
-      })
-      edgeMaterials.push(edgeMaterial)
-      const edgeGeometry = new THREE.EdgesGeometry(geometry, 24)
-      const edgeLines = new THREE.LineSegments(edgeGeometry, edgeMaterial)
-      group.add(edgeLines)
+      const shadow = new THREE.Mesh(geometry, shadowMaterial)
+      shadow.position.set(0.75, -0.4, -0.02)
+      group.add(shadow)
+
+      const mesh = new THREE.Mesh(geometry, fillMaterial)
+      group.add(mesh)
     })
   })
 
@@ -58,30 +57,16 @@ function buildSvgScooter(svgText: string, options: IntroSceneOptions) {
   const center = box.getCenter(new THREE.Vector3())
   group.position.set(-center.x, -center.y, 0)
 
-  const targetWidth = options.mobile ? 4.4 : 4.8
+  const targetWidth = options.mobile ? 5.2 : 6.1
   const fitScale = targetWidth / Math.max(size.x, 1)
   wrapper.scale.set(fitScale, -fitScale, 1)
-
-  const rim = new THREE.Mesh(
-    new THREE.PlaneGeometry(Math.max(size.x * fitScale * 1.02, 0.1), Math.max(size.y * fitScale * 1.02, 0.1)),
-    new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-      transparent: true,
-      opacity: options.mobile ? 0.06 : 0.08,
-      side: THREE.DoubleSide,
-    }),
-  )
-  rim.position.set(0.04, 0.02, -0.01)
-  wrapper.add(rim)
-
-  wrapper.position.set(0, options.mobile ? -0.55 : -0.6, 0)
+  wrapper.position.set(0, options.mobile ? -0.72 : -0.68, 0)
 
   return {
     group: wrapper,
     dispose: () => {
-      meshMaterial.dispose()
-      rim.material.dispose()
-      edgeMaterials.forEach((material) => material.dispose())
+      fillMaterial.dispose()
+      shadowMaterial.dispose()
       group.traverse((child) => {
         if (child instanceof THREE.Mesh || child instanceof THREE.LineSegments) {
           child.geometry.dispose()
@@ -172,8 +157,8 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   scene.add(halo)
 
   const scooterAnchor = new THREE.Group()
-  scooterAnchor.position.set(options.mobile ? 0 : 2.75, options.mobile ? -0.16 : -0.02, -0.85)
-  scooterAnchor.rotation.y = options.mobile ? -0.04 : -0.2
+  scooterAnchor.position.set(options.mobile ? 0.08 : 2.95, options.mobile ? -0.08 : 0.04, -0.85)
+  scooterAnchor.rotation.y = options.mobile ? -0.03 : -0.12
   scene.add(scooterAnchor)
 
   const ambient = new THREE.AmbientLight(0xffffff, 0.1)
@@ -295,9 +280,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.04, 0.16, logoReveal)
     floorReflection.material.opacity = THREE.MathUtils.lerp(0.01, 0.08, holdReveal)
 
-    scooterAnchor.position.y = THREE.MathUtils.lerp(0.08, options.mobile ? 0.02 : -0.02, scooterReveal)
-    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.1 : -0.26, options.mobile ? -0.02 : -0.14, holdReveal)
-    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.96, 1.03, scooterReveal))
+    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.38 : 3.45, options.mobile ? 0.08 : 2.95, scooterReveal)
+    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.18 : 0.22, options.mobile ? -0.08 : 0.04, scooterReveal)
+    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.08 : -0.18, options.mobile ? -0.03 : -0.12, holdReveal)
+    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.88, 1, scooterReveal))
 
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
     sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.6 : -2.4, options.mobile ? 0.7 : -0.4, logoReveal)
