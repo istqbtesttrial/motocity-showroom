@@ -41,6 +41,27 @@ function buildSvgScooter(svgText: string, options: IntroSceneOptions) {
   data.paths.forEach((path) => {
     const shapes = SVGLoader.createShapes(path)
     shapes.forEach((shape) => {
+      shape.autoClose = true
+      const points = shape.getPoints()
+      let minX = Infinity
+      let minY = Infinity
+      let maxX = -Infinity
+      let maxY = -Infinity
+
+      points.forEach((point) => {
+        if (point.x < minX) minX = point.x
+        if (point.y < minY) minY = point.y
+        if (point.x > maxX) maxX = point.x
+        if (point.y > maxY) maxY = point.y
+      })
+
+      const shapeWidth = maxX - minX
+      const shapeHeight = maxY - minY
+      const isHugeBackground = shapeWidth > 470 && shapeHeight > 470
+      if (isHugeBackground) {
+        return
+      }
+
       const geometry = new THREE.ShapeGeometry(shape)
 
       const shadow = new THREE.Mesh(geometry, shadowMaterial)
