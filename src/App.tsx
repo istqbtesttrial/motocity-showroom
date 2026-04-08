@@ -89,6 +89,21 @@ function Shell({ children }: { children: React.ReactNode }) {
     <>
       <IntroGate />
       <main className="page-shell app-layout">
+        <header className="mobile-topbar">
+          <div className="brand-block">
+            <div className="brand-mark interactive-mark">MC</div>
+            <div>
+              <p className="eyebrow">MotoCity</p>
+              <h2 className="sidebar-title">Showroom</h2>
+            </div>
+          </div>
+          <nav className="mobile-quicknav">
+            <NavLink to="/" end className="mobile-nav-pill">Accueil</NavLink>
+            <NavLink to="/scooters" className="mobile-nav-pill">Scooters</NavLink>
+            <NavLink to="/comparaison" className="mobile-nav-pill">Comparer</NavLink>
+          </nav>
+        </header>
+
         <aside className="sidebar-card" data-animate="fade-up">
           <div className="brand-block brand-block-sidebar">
             <div className="brand-mark interactive-mark">MC</div>
