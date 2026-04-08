@@ -18,8 +18,8 @@
   z-index: 9999;
   overflow: hidden;
   background:
-    radial-gradient(circle at 50% 20%, rgba(231, 205, 116, 0.1), transparent 26%),
-    linear-gradient(180deg, #09110e 0%, #101c17 52%, #16231d 100%);
+    radial-gradient(circle at 50% 18%, rgba(231, 205, 116, 0.12), transparent 26%),
+    linear-gradient(180deg, #c7cdcb 0%, #aeb7b4 52%, #9ca6a2 100%);
 }
 
 .intro-experience.is-exiting {
@@ -36,9 +36,9 @@
 
 .intro-blackframe {
   background:
-    radial-gradient(circle at 50% 24%, rgba(255, 239, 194, 0.08), transparent 30%),
-    linear-gradient(180deg, rgba(4, 8, 7, 0.08), rgba(4, 8, 7, 0.18));
-  opacity: 0.9;
+    radial-gradient(circle at 50% 24%, rgba(255, 244, 214, 0.1), transparent 30%),
+    linear-gradient(180deg, rgba(34, 40, 40, 0.04), rgba(34, 40, 40, 0.1));
+  opacity: 0.76;
 }
 
 .intro-canvas-shell canvas {
@@ -114,7 +114,7 @@
 
 .intro-kicker {
   margin-bottom: 12px;
-  color: rgba(234, 225, 194, 0.66);
+  color: rgba(92, 76, 24, 0.72);
   letter-spacing: 0.28em;
   text-transform: uppercase;
   font-size: 0.68rem;
@@ -128,14 +128,14 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-weight: 600;
-  color: #f4f1e7;
-  text-shadow: 0 16px 48px rgba(0, 0, 0, 0.32);
+  color: #fffdf7;
+  text-shadow: 0 10px 28px rgba(60, 60, 60, 0.18);
 }
 
 .intro-subcopy {
   margin-top: 18px;
   max-width: 520px;
-  color: rgba(240, 243, 232, 0.86);
+  color: rgba(58, 67, 64, 0.88);
   font-size: clamp(0.98rem, 1.4vw, 1.06rem);
   line-height: 1.7;
 }
@@ -144,9 +144,9 @@
   position: absolute;
   right: clamp(18px, 3vw, 32px);
   bottom: clamp(18px, 3vw, 28px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(240, 244, 250, 0.84);
+  border: 1px solid rgba(80, 88, 86, 0.16);
+  background: rgba(255, 255, 255, 0.34);
+  color: rgba(44, 50, 49, 0.82);
   border-radius: 999px;
   padding: 10px 16px;
   backdrop-filter: blur(12px);

@@ -25,10 +25,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
   renderer.toneMappingExposure = options.mobile ? 1.08 : 1.12
-  renderer.setClearColor(0x010202, 0)
+  renderer.setClearColor(0x121516, 0)
 
   const scene = new THREE.Scene()
-  const fog = new THREE.FogExp2(0x0b1511, options.mobile ? 0.04 : 0.032)
+  const fog = new THREE.FogExp2(0x5c6363, options.mobile ? 0.024 : 0.02)
   scene.fog = fog
 
   const camera = new THREE.PerspectiveCamera(options.mobile ? 33 : 29, width / height, 0.1, 80)
@@ -37,9 +37,9 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(options.mobile ? 10 : 13, options.mobile ? 56 : 88),
     new THREE.MeshPhysicalMaterial({
-      color: 0x102019,
-      roughness: 0.12,
-      metalness: 0.12,
+      color: 0x3e4745,
+      roughness: 0.14,
+      metalness: 0.1,
       reflectivity: 0.42,
       clearcoat: 0.52,
       clearcoatRoughness: 0.28,
@@ -59,7 +59,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   const backdrop = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 10),
-    new THREE.MeshBasicMaterial({ color: 0x0d1713, transparent: true, opacity: 1 }),
+    new THREE.MeshBasicMaterial({ color: 0xa9b1ae, transparent: true, opacity: 1 }),
   )
   backdrop.position.set(0, 1.2, -6.2)
   scene.add(backdrop)
@@ -68,7 +68,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     new THREE.PlaneGeometry(options.mobile ? 5.2 : 7.2, options.mobile ? 4.2 : 5.4),
     new THREE.ShaderMaterial({
       uniforms: {
-        uColor: { value: new THREE.Color(0xe7cd74) },
+        uColor: { value: new THREE.Color(0xf0db97) },
         uOpacity: { value: 0.03 },
       },
       transparent: true,
@@ -101,10 +101,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   scene.add(scooterGroup)
 
   const silhouetteMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x1a2420,
-    roughness: 0.34,
+    color: 0x4b5552,
+    roughness: 0.32,
     metalness: 0.08,
-    clearcoat: 0.2,
+    clearcoat: 0.18,
     clearcoatRoughness: 0.72,
   })
   const edgeMaterial = new THREE.MeshBasicMaterial({ color: 0xf2ead0, transparent: true, opacity: 0 })
@@ -196,17 +196,17 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const ambient = new THREE.AmbientLight(0xffffff, 0.02)
   scene.add(ambient)
 
-  const hemi = new THREE.HemisphereLight(0xf5ecd2, 0x203229, options.mobile ? 0.3 : 0.38)
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x7c8784, options.mobile ? 0.42 : 0.52)
   hemi.position.set(0, 4, 0)
   scene.add(hemi)
 
-  const keyLight = new THREE.SpotLight(0xf4e3b6, options.mobile ? 5.6 : 7.2, 24, 0.32, 0.8, 1.1)
+  const keyLight = new THREE.SpotLight(0xfff0c2, options.mobile ? 6.2 : 8, 24, 0.32, 0.8, 1.1)
   keyLight.position.set(-3.1, 4.2, 5.2)
   keyLight.target.position.set(options.mobile ? 0 : -1.3, 0.4, -0.6)
   scene.add(keyLight)
   scene.add(keyLight.target)
 
-  const scooterLight = new THREE.SpotLight(0xf0f5f2, options.mobile ? 5.8 : 7, 18, 0.34, 0.82, 1.1)
+  const scooterLight = new THREE.SpotLight(0xffffff, options.mobile ? 6.6 : 7.8, 18, 0.34, 0.82, 1.1)
   scooterLight.position.set(options.mobile ? 1.4 : 4.8, 2.2, 3.2)
   scooterLight.target = scooterGroup
   scene.add(scooterLight)
@@ -287,14 +287,14 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
       camera.lookAt(-0.3, THREE.MathUtils.lerp(0.46, 0.22, holdReveal), -0.5)
     }
 
-    fog.density = THREE.MathUtils.lerp(options.mobile ? 0.045 : 0.036, options.mobile ? 0.032 : 0.026, holdReveal)
+    fog.density = THREE.MathUtils.lerp(options.mobile ? 0.024 : 0.02, options.mobile ? 0.016 : 0.013, holdReveal)
 
-    ambient.intensity = THREE.MathUtils.lerp(0.02, 0.08, roomReveal)
-    hemi.intensity = THREE.MathUtils.lerp(0.12, options.mobile ? 0.34 : 0.42, roomReveal)
+    ambient.intensity = THREE.MathUtils.lerp(0.08, 0.18, roomReveal)
+    hemi.intensity = THREE.MathUtils.lerp(0.24, options.mobile ? 0.5 : 0.62, roomReveal)
     keyLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 5.8 : 7.4, logoReveal)
     scooterLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6 : 7.2, scooterReveal)
 
-    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.04, 0.16, logoReveal)
+    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.08, 0.22, logoReveal)
     floorReflection.material.opacity = THREE.MathUtils.lerp(0.01, 0.08, holdReveal)
     scooterShadow.material.opacity = THREE.MathUtils.lerp(0.04, 0.12, scooterReveal)
     scooterShadow.scale.setScalar(THREE.MathUtils.lerp(0.84, 1.02, scooterReveal))
@@ -307,7 +307,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
     sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.8 : -2.8, options.mobile ? 0.8 : -0.5, logoReveal)
 
-    backdrop.material.opacity = THREE.MathUtils.lerp(1, 0.95, blackOpening)
+    backdrop.material.opacity = THREE.MathUtils.lerp(1, 0.9, blackOpening)
     vignette.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.26, 0.18, holdReveal)
 
     renderer.render(scene, camera)
