@@ -131,27 +131,35 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   camera.position.set(options.mobile ? 0 : 0.35, options.mobile ? 0.32 : 0.52, options.mobile ? 11 : 11.6)
 
   const floor = new THREE.Mesh(
-    new THREE.CircleGeometry(options.mobile ? 10 : 13, options.mobile ? 56 : 88),
+    new THREE.CircleGeometry(options.mobile ? 11 : 15, options.mobile ? 64 : 96),
     new THREE.MeshPhysicalMaterial({
-      color: 0x101711,
-      roughness: 0.18,
-      metalness: 0.1,
-      reflectivity: 0.38,
-      clearcoat: 0.48,
-      clearcoatRoughness: 0.28,
+      color: 0x0d130e,
+      roughness: 0.12,
+      metalness: 0.12,
+      reflectivity: 0.42,
+      clearcoat: 0.62,
+      clearcoatRoughness: 0.22,
     }),
   )
   floor.rotation.x = -Math.PI / 2
-  floor.position.y = -1.34
+  floor.position.y = -1.38
   scene.add(floor)
 
   const floorReflection = new THREE.Mesh(
-    new THREE.CircleGeometry(options.mobile ? 2.8 : 4.2, 72),
-    new THREE.MeshBasicMaterial({ color: 0xe3c46f, transparent: true, opacity: 0.035 }),
+    new THREE.CircleGeometry(options.mobile ? 3.2 : 4.8, 72),
+    new THREE.MeshBasicMaterial({ color: 0xe0c06e, transparent: true, opacity: 0.028 }),
   )
   floorReflection.rotation.x = -Math.PI / 2
-  floorReflection.position.set(options.mobile ? 0 : -1.45, -1.335, 0.2)
+  floorReflection.position.set(options.mobile ? 0 : -1.35, -1.375, 0.45)
   scene.add(floorReflection)
+
+  const floorTrack = new THREE.Mesh(
+    new THREE.RingGeometry(options.mobile ? 2.8 : 3.8, options.mobile ? 4.6 : 6.4, 96),
+    new THREE.MeshBasicMaterial({ color: 0x193224, transparent: true, opacity: 0.16, side: THREE.DoubleSide }),
+  )
+  floorTrack.rotation.x = -Math.PI / 2
+  floorTrack.position.set(0, -1.374, -0.1)
+  scene.add(floorTrack)
 
   const backdrop = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 10),
@@ -219,8 +227,8 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   scene.add(halo)
 
   const scooterAnchor = new THREE.Group()
-  scooterAnchor.position.set(options.mobile ? 0.08 : 2.95, options.mobile ? -0.08 : 0.04, -0.85)
-  scooterAnchor.rotation.y = options.mobile ? -0.03 : -0.12
+  scooterAnchor.position.set(options.mobile ? 0.18 : 3.35, options.mobile ? -0.04 : -0.02, -0.72)
+  scooterAnchor.rotation.y = options.mobile ? -0.02 : -0.08
   scene.add(scooterAnchor)
 
   const ambient = new THREE.AmbientLight(0xffffff, 0.1)
@@ -230,29 +238,61 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   hemi.position.set(0, 4, 0)
   scene.add(hemi)
 
-  const keyLight = new THREE.SpotLight(0xfff0c4, options.mobile ? 6 : 7.6, 24, 0.3, 0.82, 1.1)
-  keyLight.position.set(-3.2, 4.1, 5.1)
-  keyLight.target.position.set(options.mobile ? 0 : -1.35, 0.4, -0.6)
+  const keyLight = new THREE.SpotLight(0xfff0c4, options.mobile ? 6.2 : 7.8, 26, 0.28, 0.82, 1.05)
+  keyLight.position.set(-3.4, 4.2, 5.4)
+  keyLight.target.position.set(options.mobile ? 0 : -1.15, 0.42, -0.4)
   scene.add(keyLight)
   scene.add(keyLight.target)
 
-  const rimLight = new THREE.DirectionalLight(0xffffff, options.mobile ? 0.58 : 0.68)
-  rimLight.position.set(-2, 2, 3)
+  const rimLight = new THREE.DirectionalLight(0xf9f4e3, options.mobile ? 0.72 : 0.95)
+  rimLight.position.set(4.8, 2.4, 2.8)
   scene.add(rimLight)
 
-  const scooterLight = new THREE.SpotLight(0xf3f7f4, options.mobile ? 5.8 : 6.8, 20, 0.34, 0.82, 1.1)
-  scooterLight.position.set(options.mobile ? 1.4 : 4.9, 2.3, 3.4)
+  const scooterLight = new THREE.SpotLight(0xf3f7f4, options.mobile ? 6.2 : 7.8, 24, 0.32, 0.82, 1.1)
+  scooterLight.position.set(options.mobile ? 1.7 : 5.6, 2.5, 3.8)
   scooterLight.target = scooterAnchor
   scene.add(scooterLight)
   scene.add(scooterLight.target)
 
   const sweep = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.28, options.mobile ? 2.8 : 3.8),
+    new THREE.PlaneGeometry(0.34, options.mobile ? 3.2 : 4.2),
     new THREE.MeshBasicMaterial({ color: 0xf3e2a6, transparent: true, opacity: 0.02, blending: THREE.AdditiveBlending }),
   )
-  sweep.position.set(options.mobile ? -0.6 : -2.4, 0.22, 1)
-  sweep.rotation.z = 0.12
+  sweep.position.set(options.mobile ? -0.5 : -2.2, 0.24, 1)
+  sweep.rotation.z = 0.1
   scene.add(sweep)
+
+  const scooterRim = new THREE.Mesh(
+    new THREE.PlaneGeometry(options.mobile ? 4.5 : 5.8, options.mobile ? 3.2 : 3.8),
+    new THREE.ShaderMaterial({
+      uniforms: {
+        uColor: { value: new THREE.Color(0xf4eddc) },
+        uOpacity: { value: 0.0 },
+      },
+      transparent: true,
+      depthWrite: false,
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        varying vec2 vUv;
+        uniform vec3 uColor;
+        uniform float uOpacity;
+        void main() {
+          float edge = smoothstep(0.0, 0.18, vUv.x) * (1.0 - smoothstep(0.72, 1.0, vUv.x));
+          float vertical = smoothstep(0.08, 0.42, vUv.y) * (1.0 - smoothstep(0.78, 1.0, vUv.y));
+          float alpha = edge * vertical * uOpacity;
+          gl_FragColor = vec4(uColor, alpha);
+        }
+      `,
+    }),
+  )
+  scooterRim.position.set(options.mobile ? 0.15 : 0.35, 0.12, 0.12)
+  scooterAnchor.add(scooterRim)
 
   const vignette = new THREE.Mesh(
     new THREE.PlaneGeometry(15, 9),
@@ -313,10 +353,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const render = () => {
     if (disposed) return
 
-    const roomReveal = clamp((progress - 0.14) / 0.2, 0, 1)
-    const scooterReveal = clamp((progress - 0.34) / 0.24, 0, 1)
-    const logoReveal = clamp((progress - 0.58) / 0.2, 0, 1)
-    const holdReveal = clamp((progress - 0.78) / 0.22, 0, 1)
+    const roomReveal = clamp((progress - 0.14) / 0.22, 0, 1)
+    const scooterReveal = clamp((progress - 0.36) / 0.2, 0, 1)
+    const logoReveal = clamp((progress - 0.56) / 0.2, 0, 1)
+    const holdReveal = clamp((progress - 0.76) / 0.24, 0, 1)
 
     if (options.mobile) {
       camera.position.x = Math.sin(progress * Math.PI) * 0.015
@@ -332,19 +372,20 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
     fog.density = THREE.MathUtils.lerp(options.mobile ? 0.018 : 0.015, options.mobile ? 0.013 : 0.011, holdReveal)
 
-    ambient.intensity = THREE.MathUtils.lerp(0.04, 0.12, roomReveal)
-    hemi.intensity = THREE.MathUtils.lerp(0.18, options.mobile ? 0.46 : 0.58, roomReveal)
-    keyLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6.2 : 7.8, logoReveal)
-    rimLight.intensity = THREE.MathUtils.lerp(0.1, options.mobile ? 0.64 : 0.74, scooterReveal)
-    scooterLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6 : 7, scooterReveal)
+    ambient.intensity = THREE.MathUtils.lerp(0.03, 0.11, roomReveal)
+    hemi.intensity = THREE.MathUtils.lerp(0.12, options.mobile ? 0.42 : 0.54, roomReveal)
+    keyLight.intensity = THREE.MathUtils.lerp(0.6, options.mobile ? 6.4 : 8.1, logoReveal)
+    rimLight.intensity = THREE.MathUtils.lerp(0.08, options.mobile ? 0.88 : 1.08, scooterReveal)
+    scooterLight.intensity = THREE.MathUtils.lerp(0.7, options.mobile ? 6.5 : 8.4, scooterReveal)
 
     halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.03, 0.18, logoReveal)
-    floorReflection.material.opacity = THREE.MathUtils.lerp(0.008, 0.065, holdReveal)
+    floorReflection.material.opacity = THREE.MathUtils.lerp(0.006, 0.05, holdReveal)
+    scooterRim.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.0, 0.22, scooterReveal)
 
-    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.38 : 3.45, options.mobile ? 0.08 : 2.95, scooterReveal)
-    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.18 : 0.22, options.mobile ? -0.08 : 0.04, scooterReveal)
-    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.08 : -0.18, options.mobile ? -0.03 : -0.12, holdReveal)
-    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.88, 1, scooterReveal))
+    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.72 : 4.35, options.mobile ? 0.18 : 3.35, scooterReveal)
+    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.16 : 0.16, options.mobile ? -0.04 : -0.02, scooterReveal)
+    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.06 : -0.14, options.mobile ? -0.02 : -0.08, holdReveal)
+    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.84, 1.02, scooterReveal))
 
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
     sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.6 : -2.4, options.mobile ? 0.7 : -0.4, logoReveal)
