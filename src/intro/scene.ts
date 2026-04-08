@@ -1,6 +1,4 @@
 import * as THREE from 'three'
-import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
-import scooterCleanSvgUrl from './assets/scooter-clean.svg?url'
 
 export type IntroSceneController = {
   canvas: HTMLCanvasElement
@@ -16,100 +14,6 @@ export type IntroSceneOptions = {
 }
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
-
-function buildScooterSilhouette(svgText: string, options: IntroSceneOptions) {
-  const loader = new SVGLoader()
-  const data = loader.parse(svgText)
-  const wrapper = new THREE.Group()
-  const shadowGroup = new THREE.Group()
-  const baseGroup = new THREE.Group()
-  const highlightGroup = new THREE.Group()
-  const wheelGlowGroup = new THREE.Group()
-  wrapper.add(shadowGroup)
-  wrapper.add(wheelGlowGroup)
-  wrapper.add(baseGroup)
-  wrapper.add(highlightGroup)
-
-  const shadowMaterial = new THREE.MeshBasicMaterial({
-    color: 0xe8ddc2,
-    transparent: true,
-    opacity: 0.08,
-    side: THREE.DoubleSide,
-  })
-  const baseMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x1a201f,
-    metalness: 0.18,
-    roughness: 0.62,
-    clearcoat: 0.18,
-    clearcoatRoughness: 0.72,
-    side: THREE.DoubleSide,
-  })
-  const highlightMaterial = new THREE.MeshBasicMaterial({
-    color: 0xaeb7b2,
-    transparent: true,
-    opacity: 0.17,
-    side: THREE.DoubleSide,
-    blending: THREE.AdditiveBlending,
-  })
-  const wheelGlowMaterial = new THREE.MeshBasicMaterial({
-    color: 0xd6bb73,
-    transparent: true,
-    opacity: 0.05,
-    side: THREE.DoubleSide,
-    blending: THREE.AdditiveBlending,
-  })
-
-  data.paths.forEach((path) => {
-    const shapes = SVGLoader.createShapes(path)
-    shapes.forEach((shape) => {
-      const geometry = new THREE.ShapeGeometry(shape)
-
-      const shadow = new THREE.Mesh(geometry, shadowMaterial)
-      shadow.position.set(0.1, -0.06, -0.03)
-      shadowGroup.add(shadow)
-
-      const base = new THREE.Mesh(geometry, baseMaterial)
-      baseGroup.add(base)
-
-      const highlight = new THREE.Mesh(geometry, highlightMaterial)
-      highlight.scale.set(0.987, 0.987, 1)
-      highlight.position.set(-0.18, 0.14, 0.02)
-      highlightGroup.add(highlight)
-
-      const wheelGlow = new THREE.Mesh(geometry, wheelGlowMaterial)
-      wheelGlow.scale.set(0.978, 0.978, 1)
-      wheelGlow.position.set(0.02, -0.02, -0.01)
-      wheelGlowGroup.add(wheelGlow)
-    })
-  })
-
-  const box = new THREE.Box3().setFromObject(baseGroup)
-  const size = box.getSize(new THREE.Vector3())
-  const center = box.getCenter(new THREE.Vector3())
-  ;[shadowGroup, baseGroup, highlightGroup, wheelGlowGroup].forEach((g) => {
-    g.position.set(-center.x, -center.y, 0)
-  })
-
-  const targetWidth = options.mobile ? 5.1 : 5.9
-  const fitScale = targetWidth / Math.max(size.x, 1)
-  wrapper.scale.set(fitScale, -fitScale, 1)
-  wrapper.position.set(0, options.mobile ? -0.64 : -0.62, 0)
-
-  return {
-    group: wrapper,
-    dispose: () => {
-      shadowMaterial.dispose()
-      baseMaterial.dispose()
-      highlightMaterial.dispose()
-      wheelGlowMaterial.dispose()
-      wrapper.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          child.geometry.dispose()
-        }
-      })
-    },
-  }
-}
 
 export function createIntroScene(container: HTMLElement, options: IntroSceneOptions): IntroSceneController {
   const width = Math.max(container.clientWidth, 1)
@@ -325,16 +229,6 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   let progress = 0
   let disposed = false
-  let scooterScene: ReturnType<typeof buildScooterSilhouette> | null = null
-
-  fetch(scooterCleanSvgUrl)
-    .then((response) => response.text())
-    .then((svgText) => {
-      if (disposed) return
-      scooterScene = buildScooterSilhouette(svgText, options)
-      scooterAnchor.add(scooterScene.group)
-    })
-    .catch(() => undefined)
 
   const resize = () => {
     if (disposed) return
@@ -353,45 +247,44 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const render = () => {
     if (disposed) return
 
-    const roomReveal = clamp((progress - 0.14) / 0.22, 0, 1)
-    const scooterReveal = clamp((progress - 0.36) / 0.2, 0, 1)
-    const logoReveal = clamp((progress - 0.56) / 0.2, 0, 1)
-    const holdReveal = clamp((progress - 0.76) / 0.24, 0, 1)
+    const roomReveal = clamp(progress / 0.32, 0, 1)
+    const pushReveal = clamp((progress - 0.16) / 0.42, 0, 1)
+    const settleReveal = clamp((progress - 0.58) / 0.22, 0, 1)
+    const holdReveal = clamp((progress - 0.78) / 0.22, 0, 1)
 
     if (options.mobile) {
-      camera.position.x = Math.sin(progress * Math.PI) * 0.015
-      camera.position.y = THREE.MathUtils.lerp(0.34, 0.5, holdReveal)
-      camera.position.z = THREE.MathUtils.lerp(11, 8.4, progress)
-      camera.lookAt(0, THREE.MathUtils.lerp(0.42, 0.2, holdReveal), -0.5)
+      camera.position.x = Math.sin(progress * Math.PI) * 0.012
+      camera.position.y = THREE.MathUtils.lerp(0.38, 0.48, holdReveal)
+      camera.position.z = THREE.MathUtils.lerp(12.6, 8.7, pushReveal)
+      camera.lookAt(0.05, THREE.MathUtils.lerp(0.28, 0.18, holdReveal), -0.4)
     } else {
-      camera.position.x = THREE.MathUtils.lerp(0.24, 0.06, holdReveal) + Math.sin(progress * Math.PI) * 0.02
-      camera.position.y = THREE.MathUtils.lerp(0.52, 0.74, holdReveal)
-      camera.position.z = THREE.MathUtils.lerp(11.6, 8.8, progress)
-      camera.lookAt(-0.5, THREE.MathUtils.lerp(0.44, 0.22, holdReveal), -0.5)
+      camera.position.x = THREE.MathUtils.lerp(0.32, 0.08, settleReveal)
+      camera.position.y = THREE.MathUtils.lerp(0.68, 0.82, holdReveal)
+      camera.position.z = THREE.MathUtils.lerp(13.2, 9.1, pushReveal)
+      camera.lookAt(-0.2, THREE.MathUtils.lerp(0.3, 0.16, holdReveal), -0.42)
     }
 
-    fog.density = THREE.MathUtils.lerp(options.mobile ? 0.018 : 0.015, options.mobile ? 0.013 : 0.011, holdReveal)
+    fog.density = THREE.MathUtils.lerp(options.mobile ? 0.024 : 0.02, options.mobile ? 0.012 : 0.01, holdReveal)
 
-    ambient.intensity = THREE.MathUtils.lerp(0.03, 0.11, roomReveal)
-    hemi.intensity = THREE.MathUtils.lerp(0.12, options.mobile ? 0.42 : 0.54, roomReveal)
-    keyLight.intensity = THREE.MathUtils.lerp(0.6, options.mobile ? 6.4 : 8.1, logoReveal)
-    rimLight.intensity = THREE.MathUtils.lerp(0.08, options.mobile ? 0.88 : 1.08, scooterReveal)
-    scooterLight.intensity = THREE.MathUtils.lerp(0.7, options.mobile ? 6.5 : 8.4, scooterReveal)
+    ambient.intensity = THREE.MathUtils.lerp(0.02, 0.1, roomReveal)
+    hemi.intensity = THREE.MathUtils.lerp(0.08, options.mobile ? 0.36 : 0.48, roomReveal)
+    keyLight.intensity = THREE.MathUtils.lerp(0.4, options.mobile ? 5.8 : 7.2, settleReveal)
+    rimLight.intensity = THREE.MathUtils.lerp(0.04, options.mobile ? 0.82 : 1.02, settleReveal)
+    scooterLight.intensity = THREE.MathUtils.lerp(0.5, options.mobile ? 5.4 : 7.4, settleReveal)
 
-    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.03, 0.18, logoReveal)
-    floorReflection.material.opacity = THREE.MathUtils.lerp(0.006, 0.05, holdReveal)
-    scooterRim.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.0, 0.22, scooterReveal)
+    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.02, 0.16, settleReveal)
+    floorReflection.material.opacity = THREE.MathUtils.lerp(0.003, 0.04, holdReveal)
+    scooterRim.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.0, 0.18, settleReveal)
 
-    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.72 : 4.35, options.mobile ? 0.18 : 3.35, scooterReveal)
-    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.16 : 0.16, options.mobile ? -0.04 : -0.02, scooterReveal)
-    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.06 : -0.14, options.mobile ? -0.02 : -0.08, holdReveal)
-    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.84, 1.02, scooterReveal))
+    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.95 : 5.1, options.mobile ? 0.22 : 3.55, settleReveal)
+    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.34 : 0.28, options.mobile ? -0.02 : -0.02, settleReveal)
+    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.16 : -0.24, options.mobile ? -0.03 : -0.09, settleReveal)
+    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.72, 1.0, pushReveal))
 
-    sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
-    sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.6 : -2.4, options.mobile ? 0.7 : -0.4, logoReveal)
+    sweep.material.opacity = THREE.MathUtils.lerp(0, 0.05, Math.sin(settleReveal * Math.PI))
+    sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.8 : -2.8, options.mobile ? 0.5 : -0.3, settleReveal)
 
-    
-    vignette.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.2, 0.12, holdReveal)
+    vignette.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.24, 0.12, holdReveal)
 
     renderer.render(scene, camera)
   }
@@ -411,7 +304,6 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     sweep.geometry.dispose()
     vignette.material.dispose()
     vignette.geometry.dispose()
-    scooterScene?.dispose()
     if (renderer.domElement.parentElement === container) {
       container.removeChild(renderer.domElement)
     }

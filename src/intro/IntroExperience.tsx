@@ -55,11 +55,10 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     const state = { progress: 0 }
 
     timeline
-      .to(state, { progress: 0.16, duration: 1.5, ease: 'power1.out' })
-      .to(state, { progress: 0.42, duration: 2.0, ease: 'power2.inOut' })
-      .to(state, { progress: 0.72, duration: 2.0, ease: 'power2.inOut' })
-      .to(state, { progress: 0.86, duration: 2.0, ease: 'power2.inOut' })
-      .to(state, { progress: 1, duration: 1.7, ease: 'power2.out' })
+      .to(state, { progress: 0.18, duration: 1.6, ease: 'power1.out' })
+      .to(state, { progress: 0.58, duration: 3.1, ease: 'power2.inOut' })
+      .to(state, { progress: 0.82, duration: 2.0, ease: 'power2.out' })
+      .to(state, { progress: 1, duration: 1.5, ease: 'power1.out' })
 
     const renderLoop = () => {
       scene.updateProgress(state.progress)
@@ -73,20 +72,14 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     const textTl = gsap.timeline()
     if (content) {
       textTl
-        .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.6, delay: 0.5 })
-        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.6, duration: 0.7, ease: 'power2.out', delay: 5.4 })
-        .fromTo('.intro-logo-shell', { y: 18, opacity: 0, scale: 0.96 }, { y: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.out' }, '-=0.05')
-        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.46, duration: 1.0, ease: 'power2.inOut' }, '+=0.05')
-        .fromTo(
-          '.intro-scooter-overlay',
-          { x: 18, y: 34, opacity: 0, scale: 0.62, filter: 'blur(10px)' },
-          { x: 0, y: 0, opacity: 0.95, scale: 1, filter: 'blur(0px)', duration: 2.2, ease: 'power3.out' },
-          '-=0.25',
-        )
-        .fromTo('.intro-brand', { y: 14, opacity: 0, letterSpacing: '0.22em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 0.9, ease: 'power3.out' }, '-=0.75')
-        .fromTo('.intro-divider', { scaleX: 0.6, opacity: 0 }, { scaleX: 1, opacity: 0.56, duration: 0.65, ease: 'power2.out' }, '-=0.55')
-        .fromTo('.intro-subcopy', { y: 10, opacity: 0 }, { y: 0, opacity: 0.72, duration: 0.8, ease: 'power2.out' }, '-=0.22')
-        .to({}, { duration: 1.9 })
+        .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.6, delay: 0.45 })
+        .fromTo('.intro-scooter-overlay', { y: 64, opacity: 0, scale: 0.42, filter: 'blur(16px)' }, { y: 0, opacity: 0.96, scale: 1, filter: 'blur(0px)', duration: 3.2, ease: 'power3.out', delay: 1.15 }, 0)
+        .fromTo('.intro-logo-shell', { y: 24, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 1.05, ease: 'power3.out' }, '+=1.4')
+        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.4, duration: 1.0, ease: 'power2.inOut' }, '-=0.12')
+        .fromTo('.intro-brand', { y: 18, opacity: 0, letterSpacing: '0.24em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 0.95, ease: 'power3.out' }, '-=0.48')
+        .fromTo('.intro-divider', { scaleX: 0.5, opacity: 0 }, { scaleX: 1, opacity: 0.56, duration: 0.7, ease: 'power2.out' }, '-=0.5')
+        .fromTo('.intro-subcopy', { y: 12, opacity: 0 }, { y: 0, opacity: 0.72, duration: 0.85, ease: 'power2.out' }, '-=0.18')
+        .to({}, { duration: 1.6 })
     }
 
     const handleResize = () => scene.resize()
