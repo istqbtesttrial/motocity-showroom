@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
+import motoCityLogo from '../assets/motocity-logo.jpg'
 import { createIntroScene } from './scene'
 
 type IntroExperienceProps = {
@@ -69,13 +70,13 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     const textTl = gsap.timeline()
     if (content) {
       textTl
-        .fromTo('.intro-logo-badge', { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.9, ease: 'power3.out', delay: 0.15 })
-        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.68, duration: 0.7, ease: 'power2.out' }, '-=0.35')
-        .to('.intro-logo-shell', { opacity: 0, duration: 0.45, ease: 'power2.out' }, '+=0.55')
-        .fromTo('.intro-brand', { y: 18, opacity: 0, letterSpacing: '0.34em' }, { y: 0, opacity: 1, letterSpacing: '0.22em', duration: 1.05, ease: 'power3.out' }, '-=0.05')
-        .fromTo('.intro-divider', { scaleX: 0.6, opacity: 0 }, { scaleX: 1, opacity: 0.72, duration: 0.75, ease: 'power2.out' }, '-=0.65')
-        .fromTo('.intro-subcopy', { y: 10, opacity: 0 }, { y: 0, opacity: 0.76, duration: 0.85, ease: 'power2.out' }, '-=0.4')
-        .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.8 }, '-=0.45')
+        .fromTo('.intro-kicker', { y: 8, opacity: 0 }, { y: 0, opacity: 0.66, duration: 0.55, ease: 'power2.out', delay: 2.8 })
+        .fromTo('.intro-logo-shell', { y: 14, opacity: 0, scale: 0.97 }, { y: 0, opacity: 1, scale: 1, duration: 1.1, ease: 'power3.out' }, '-=0.05')
+        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 140, opacity: 0.55, duration: 0.95, ease: 'power2.inOut' }, '+=0.08')
+        .fromTo('.intro-brand', { y: 12, opacity: 0, letterSpacing: '0.26em' }, { y: 0, opacity: 1, letterSpacing: '0.2em', duration: 0.9, ease: 'power3.out' }, '-=0.45')
+        .fromTo('.intro-divider', { scaleX: 0.6, opacity: 0 }, { scaleX: 1, opacity: 0.6, duration: 0.7, ease: 'power2.out' }, '-=0.55')
+        .fromTo('.intro-subcopy', { y: 10, opacity: 0 }, { y: 0, opacity: 0.74, duration: 0.8, ease: 'power2.out' }, '-=0.38')
+        .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.8 }, '-=0.5')
     }
 
     const handleResize = () => scene.resize()
@@ -164,20 +165,16 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
       )}
 
       <div className="intro-overlay">
-        <div className="intro-logo-shell" aria-hidden="true">
+        <p className="intro-kicker">Silent luxury reveal</p>
+        <div className="intro-logo-shell">
           <div className="intro-logo-badge">
-            <div className="intro-logo-ring" />
-            <div className="intro-logo-core">
-              <span className="intro-logo-word">MOTO CITY</span>
-              <span className="intro-logo-mark">MC</span>
-              <span className="intro-logo-handlebar">⌒</span>
-            </div>
+            <img src={motoCityLogo} alt="MotoCity" className="intro-logo-image" />
+            <div className="intro-logo-sweep" aria-hidden="true" />
           </div>
         </div>
-        <p className="intro-kicker">Door opening reveal</p>
         <h1 className="intro-brand">MotoCity</h1>
         <div className="intro-divider" aria-hidden="true" />
-        <p className="intro-subcopy">Le logo s’ouvre comme un accès showroom, puis révèle un scooter avec retenue.</p>
+        <p className="intro-subcopy">Une silhouette de scooter se révèle dans l’ombre, puis le badge MotoCity prend naturellement le premier plan.</p>
       </div>
 
       <button type="button" className="intro-skip" onClick={handleSkip} aria-label="Passer l’introduction">

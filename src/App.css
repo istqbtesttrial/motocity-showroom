@@ -51,11 +51,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   text-align: center;
   padding: clamp(28px, 5vw, 54px);
   padding-bottom: clamp(56px, 8vw, 88px);
-  background: linear-gradient(180deg, rgba(2, 3, 5, 0.08) 0%, rgba(2, 3, 5, 0.08) 28%, rgba(2, 3, 5, 0.18) 58%, rgba(2, 3, 5, 0.56) 100%);
+  background: linear-gradient(180deg, rgba(2, 3, 5, 0.02) 0%, rgba(2, 3, 5, 0.02) 44%, rgba(2, 3, 5, 0.16) 70%, rgba(2, 3, 5, 0.52) 100%);
 }
 
 .intro-logo-shell,
@@ -68,92 +68,64 @@
 }
 
 .intro-logo-shell {
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-top: clamp(10px, 4vh, 40px);
+  margin-bottom: 22px;
 }
 
 .intro-logo-badge {
   position: relative;
-  width: min(220px, 36vw);
+  width: min(210px, 34vw);
   aspect-ratio: 1;
   border-radius: 50%;
-  display: grid;
-  place-items: center;
-  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.28));
+  overflow: hidden;
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.3);
 }
 
-.intro-logo-ring,
-.intro-logo-core {
-  position: absolute;
-  inset: 0;
+.intro-logo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 50%;
+  display: block;
 }
 
-.intro-logo-ring {
-  border: 3px solid rgba(232, 207, 99, 0.92);
-  box-shadow: inset 0 0 0 2px rgba(232, 207, 99, 0.24);
-}
-
-.intro-logo-core {
-  inset: 10px;
-  background: radial-gradient(circle at 50% 30%, rgba(65, 95, 73, 0.98), rgba(44, 71, 54, 0.98));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-.intro-logo-word,
-.intro-logo-mark,
-.intro-logo-handlebar {
+.intro-logo-sweep {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #eed573;
-}
-
-.intro-logo-word {
-  top: 18%;
-  font-size: clamp(0.6rem, 1.2vw, 0.9rem);
-  font-weight: 700;
-  letter-spacing: 0.22em;
-}
-
-.intro-logo-mark {
-  top: 30%;
-  font-size: clamp(2.8rem, 7vw, 4.7rem);
-  font-weight: 800;
-  letter-spacing: -0.06em;
-}
-
-.intro-logo-handlebar {
-  bottom: 12%;
-  font-size: clamp(2.4rem, 5vw, 3.4rem);
-  transform: translateX(-50%) scaleX(2.2);
-  opacity: 0.9;
+  top: -10%;
+  bottom: -10%;
+  left: -45%;
+  width: 24%;
+  background: linear-gradient(90deg, transparent, rgba(255, 251, 230, 0.55), transparent);
+  transform: skewX(-18deg);
+  mix-blend-mode: screen;
+  filter: blur(2px);
 }
 
 .intro-divider {
-  width: min(160px, 24vw);
+  width: min(140px, 22vw);
   height: 1px;
-  margin-top: 18px;
-  background: linear-gradient(90deg, transparent, rgba(214, 226, 242, 0.62), transparent);
+  margin-top: 16px;
+  background: linear-gradient(90deg, transparent, rgba(230, 205, 118, 0.58), transparent);
   transform-origin: center;
 }
 
 .intro-kicker {
   margin-bottom: 12px;
-  color: rgba(214, 226, 242, 0.72);
-  letter-spacing: 0.36em;
+  color: rgba(234, 225, 194, 0.66);
+  letter-spacing: 0.32em;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
 }
 
 .intro-brand {
   max-width: none;
-  font-size: clamp(2.6rem, 6.4vw, 5.2rem);
-  line-height: 0.94;
-  letter-spacing: 0.22em;
+  font-size: clamp(2.3rem, 5.8vw, 4.6rem);
+  line-height: 0.96;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   font-weight: 600;
   color: #f4f1e7;
@@ -842,11 +814,7 @@ h3 { font-size: 1.35rem; }
   }
 
   .intro-logo-badge {
-    width: min(170px, 44vw);
-  }
-
-  .intro-logo-core {
-    inset: 8px;
+    width: min(160px, 44vw);
   }
 
   .intro-kicker {
