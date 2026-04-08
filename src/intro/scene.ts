@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
+import scooterSvgUrl from './assets/scooter.svg?url'
 
 export type IntroSceneController = {
   canvas: HTMLCanvasElement
@@ -15,6 +17,76 @@ export type IntroSceneOptions = {
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
+function buildSvgScooter(svgText: string, options: IntroSceneOptions) {
+  const loader = new SVGLoader()
+  const data = loader.parse(svgText)
+  const group = new THREE.Group()
+  const material = new THREE.MeshPhysicalMaterial({
+    color: 0x3e4648,
+    metalness: 0.08,
+    roughness: 0.58,
+    clearcoat: 0.16,
+    clearcoatRoughness: 0.82,
+    side: THREE.DoubleSide,
+  })
+  const rimMaterial = new THREE.MeshBasicMaterial({
+    color: 0xf2f0e8,
+    transparent: true,
+    opacity: options.mobile ? 0.22 : 0.28,
+    side: THREE.DoubleSide,
+  })
+
+  data.paths.forEach((path) => {
+    const shapes = SVGLoader.createShapes(path)
+    shapes.forEach((shape) => {
+      const geometry = new THREE.ShapeGeometry(shape)
+      const mesh = new THREE.Mesh(geometry, material)
+      group.add(mesh)
+
+      const edgeGeometry = new THREE.EdgesGeometry(geometry, 28)
+      const edgeLines = new THREE.LineSegments(edgeGeometry, new THREE.LineBasicMaterial({
+        color: 0xf2ebd7,
+        transparent: true,
+        opacity: options.mobile ? 0.12 : 0.16,
+      }))
+      group.add(edgeLines)
+    })
+  })
+
+  const box = new THREE.Box3().setFromObject(group)
+  const size = box.getSize(new THREE.Vector3())
+  const center = box.getCenter(new THREE.Vector3())
+  group.position.sub(center)
+
+  const scale = options.mobile ? 0.0115 : 0.0105
+  group.scale.set(scale, -scale, scale)
+
+  const rim = new THREE.Mesh(
+    new THREE.PlaneGeometry(size.x * scale * 1.06, size.y * scale * 1.04),
+    rimMaterial,
+  )
+  rim.position.set(0.05, 0.02, -0.02)
+  group.add(rim)
+
+  return {
+    group,
+    dispose: () => {
+      material.dispose()
+      rimMaterial.dispose()
+      group.traverse((child) => {
+        if (child instanceof THREE.Mesh) {
+          child.geometry.dispose()
+        }
+        if (child instanceof THREE.LineSegments) {
+          child.geometry.dispose()
+          if (Array.isArray(child.material)) child.material.forEach((m) => m.dispose())
+          else child.material.dispose()
+        }
+      })
+    },
+  }
+}
+
 export function createIntroScene(container: HTMLElement, options: IntroSceneOptions): IntroSceneController {
   const width = Math.max(container.clientWidth, 1)
   const height = Math.max(container.clientHeight, 1)
@@ -24,52 +96,52 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   renderer.setSize(width, height)
   renderer.outputColorSpace = THREE.SRGBColorSpace
   renderer.toneMapping = THREE.ACESFilmicToneMapping
-  renderer.toneMappingExposure = options.mobile ? 1.08 : 1.12
-  renderer.setClearColor(0x121516, 0)
+  renderer.toneMappingExposure = options.mobile ? 1.08 : 1.1
+  renderer.setClearColor(0x141717, 0)
 
   const scene = new THREE.Scene()
-  const fog = new THREE.FogExp2(0x5c6363, options.mobile ? 0.024 : 0.02)
+  const fog = new THREE.FogExp2(0x8c9492, options.mobile ? 0.018 : 0.015)
   scene.fog = fog
 
-  const camera = new THREE.PerspectiveCamera(options.mobile ? 33 : 29, width / height, 0.1, 80)
-  camera.position.set(options.mobile ? 0 : 0.45, options.mobile ? 0.3 : 0.5, options.mobile ? 11.6 : 12.2)
+  const camera = new THREE.PerspectiveCamera(options.mobile ? 34 : 30, width / height, 0.1, 80)
+  camera.position.set(options.mobile ? 0 : 0.35, options.mobile ? 0.32 : 0.52, options.mobile ? 11 : 11.6)
 
   const floor = new THREE.Mesh(
     new THREE.CircleGeometry(options.mobile ? 10 : 13, options.mobile ? 56 : 88),
     new THREE.MeshPhysicalMaterial({
-      color: 0x3e4745,
+      color: 0x5c6462,
       roughness: 0.14,
-      metalness: 0.1,
-      reflectivity: 0.42,
-      clearcoat: 0.52,
-      clearcoatRoughness: 0.28,
+      metalness: 0.08,
+      reflectivity: 0.44,
+      clearcoat: 0.56,
+      clearcoatRoughness: 0.24,
     }),
   )
   floor.rotation.x = -Math.PI / 2
-  floor.position.y = -1.3
+  floor.position.y = -1.34
   scene.add(floor)
 
   const floorReflection = new THREE.Mesh(
-    new THREE.CircleGeometry(options.mobile ? 2.4 : 3.6, 64),
-    new THREE.MeshBasicMaterial({ color: 0xf0d987, transparent: true, opacity: 0.012 }),
+    new THREE.CircleGeometry(options.mobile ? 2.6 : 3.8, 72),
+    new THREE.MeshBasicMaterial({ color: 0xf0d98b, transparent: true, opacity: 0.04 }),
   )
   floorReflection.rotation.x = -Math.PI / 2
-  floorReflection.position.set(options.mobile ? 0 : -1.6, -1.295, 0.2)
+  floorReflection.position.set(options.mobile ? 0 : -1.45, -1.335, 0.2)
   scene.add(floorReflection)
 
   const backdrop = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 10),
-    new THREE.MeshBasicMaterial({ color: 0xa9b1ae, transparent: true, opacity: 1 }),
+    new THREE.MeshBasicMaterial({ color: 0xb8c0bd, transparent: true, opacity: 1 }),
   )
-  backdrop.position.set(0, 1.2, -6.2)
+  backdrop.position.set(0, 1.2, -6.4)
   scene.add(backdrop)
 
   const halo = new THREE.Mesh(
-    new THREE.PlaneGeometry(options.mobile ? 5.2 : 7.2, options.mobile ? 4.2 : 5.4),
+    new THREE.PlaneGeometry(options.mobile ? 5 : 6.8, options.mobile ? 4 : 5),
     new THREE.ShaderMaterial({
       uniforms: {
-        uColor: { value: new THREE.Color(0xf0db97) },
-        uOpacity: { value: 0.03 },
+        uColor: { value: new THREE.Color(0xf1dd99) },
+        uOpacity: { value: 0.04 },
       },
       transparent: true,
       depthWrite: false,
@@ -92,135 +164,34 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
       `,
     }),
   )
-  halo.position.set(0, 0.86, -4.2)
+  halo.position.set(options.mobile ? 0 : -1.45, 0.92, -4.3)
   scene.add(halo)
 
-  const scooterGroup = new THREE.Group()
-  scooterGroup.position.set(options.mobile ? 0 : 2.1, options.mobile ? -0.08 : -0.02, -0.7)
-  scooterGroup.rotation.y = options.mobile ? -0.02 : -0.12
-  scene.add(scooterGroup)
+  const scooterAnchor = new THREE.Group()
+  scooterAnchor.position.set(options.mobile ? 0 : 2.75, options.mobile ? -0.16 : -0.02, -0.85)
+  scooterAnchor.rotation.y = options.mobile ? -0.04 : -0.2
+  scene.add(scooterAnchor)
 
-  const silhouetteMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x4b5552,
-    roughness: 0.32,
-    metalness: 0.08,
-    clearcoat: 0.18,
-    clearcoatRoughness: 0.72,
-  })
-  const edgeMaterial = new THREE.MeshBasicMaterial({ color: 0xf2ead0, transparent: true, opacity: 0 })
-
-  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.72, 2.15, 8, 24), silhouetteMaterial)
-  body.rotation.z = Math.PI / 2
-  body.scale.set(options.mobile ? 1.34 : 1.42, options.mobile ? 0.48 : 0.5, 0.42)
-  body.position.set(options.mobile ? -0.02 : -0.04, 0.02, 0)
-  scooterGroup.add(body)
-
-  const frontShield = new THREE.Mesh(new THREE.SphereGeometry(0.72, 24, 24), silhouetteMaterial)
-  frontShield.scale.set(options.mobile ? 0.78 : 0.76, options.mobile ? 1.44 : 1.42, 0.34)
-  frontShield.position.set(options.mobile ? 1.62 : 1.6, options.mobile ? 0.5 : 0.5, 0)
-  scooterGroup.add(frontShield)
-
-  const rearBody = new THREE.Mesh(new THREE.SphereGeometry(0.66, 24, 24), silhouetteMaterial)
-  rearBody.scale.set(options.mobile ? 1.18 : 1.2, options.mobile ? 0.76 : 0.74, 0.34)
-  rearBody.position.set(options.mobile ? -1.7 : -1.82, 0.12, 0)
-  scooterGroup.add(rearBody)
-
-  const seat = new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.16, 0.24), silhouetteMaterial)
-  seat.position.set(options.mobile ? -0.36 : -0.42, options.mobile ? 0.66 : 0.66, 0)
-  seat.rotation.z = -0.08
-  seat.scale.set(options.mobile ? 1.24 : 1.28, options.mobile ? 1.1 : 1.08, 1)
-  scooterGroup.add(seat)
-
-  const neck = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.86, 6, 12), silhouetteMaterial)
-  neck.position.set(options.mobile ? 0.8 : 0.76, options.mobile ? 0.82 : 0.84, 0)
-  neck.rotation.z = -0.24
-  neck.scale.set(options.mobile ? 1.08 : 1.12, 1, 1)
-  scooterGroup.add(neck)
-
-  const handlebar = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.016, 10, 42, Math.PI), silhouetteMaterial)
-  handlebar.rotation.z = Math.PI
-  handlebar.position.set(options.mobile ? 1.0 : 0.94, options.mobile ? 1.18 : 1.18, 0)
-  handlebar.scale.set(options.mobile ? 1.08 : 1.12, 1, 1)
-  scooterGroup.add(handlebar)
-
-  const leftMirror = new THREE.Mesh(new THREE.SphereGeometry(0.08, 16, 16), silhouetteMaterial)
-  leftMirror.scale.set(options.mobile ? 1.45 : 1.36, options.mobile ? 1 : 0.96, 0.4)
-  leftMirror.position.set(options.mobile ? 0.52 : 0.36, options.mobile ? 1.44 : 1.5, 0.28)
-  scooterGroup.add(leftMirror)
-  const rightMirror = leftMirror.clone()
-  rightMirror.position.z = options.mobile ? -0.26 : -0.22
-  scooterGroup.add(rightMirror)
-
-  const windshield = new THREE.Mesh(new THREE.BoxGeometry(0.52, 0.08, 0.14), silhouetteMaterial)
-  windshield.position.set(options.mobile ? 1.22 : 1.1, options.mobile ? 1.18 : 1.18, 0)
-  windshield.rotation.z = 0.16
-  windshield.scale.set(options.mobile ? 1.14 : 1.18, options.mobile ? 1.12 : 1.2, 1)
-  scooterGroup.add(windshield)
-
-  const topCase = new THREE.Mesh(new THREE.CapsuleGeometry(0.22, 0.54, 6, 12), silhouetteMaterial)
-  topCase.rotation.z = Math.PI / 2
-  topCase.position.set(options.mobile ? -1.98 : -2.16, options.mobile ? 1.02 : 1.02, 0)
-  topCase.scale.set(options.mobile ? 1.22 : 1.22, options.mobile ? 0.86 : 0.84, 0.72)
-  scooterGroup.add(topCase)
-
-  const floorboard = new THREE.Mesh(new THREE.BoxGeometry(1.86, 0.08, 0.12), silhouetteMaterial)
-  floorboard.position.set(0.02, options.mobile ? -0.44 : -0.44, 0)
-  floorboard.rotation.z = -0.03
-  floorboard.scale.set(options.mobile ? 1.08 : 1.08, 1, 1)
-  scooterGroup.add(floorboard)
-
-  const frontWheel = new THREE.Mesh(
-    new THREE.TorusGeometry(0.42, 0.05, 14, 40),
-    new THREE.MeshStandardMaterial({ color: 0x050606, metalness: 0.04, roughness: 0.78 }),
-  )
-  frontWheel.rotation.y = Math.PI / 2
-  frontWheel.position.set(options.mobile ? 1.36 : 1.34, -0.97, 0)
-  frontWheel.scale.setScalar(options.mobile ? 1.08 : 1.06)
-  scooterGroup.add(frontWheel)
-  const rearWheel = frontWheel.clone()
-  rearWheel.position.set(options.mobile ? -1.54 : -1.62, -0.97, 0)
-  scooterGroup.add(rearWheel)
-
-  const upperEdge = new THREE.Mesh(
-    new THREE.TorusGeometry(2.1, 0.012, 8, 120, Math.PI * 0.54),
-    edgeMaterial,
-  )
-  upperEdge.rotation.set(Math.PI * 0.1, Math.PI, -0.1)
-  upperEdge.position.set(options.mobile ? 0.18 : 0.08, 0.62, 0.12)
-  scooterGroup.add(upperEdge)
-
-  const lowerEdge = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.012, 0.012, 1.9, 12),
-    edgeMaterial,
-  )
-  lowerEdge.rotation.z = Math.PI / 2 - 0.03
-  lowerEdge.position.set(0.08, -0.34, 0.08)
-  scooterGroup.add(lowerEdge)
-
-  const scooterShadow = new THREE.Mesh(
-    new THREE.CircleGeometry(1.7, 48),
-    new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.08 }),
-  )
-  scooterShadow.rotation.x = -Math.PI / 2
-  scooterShadow.position.set(options.mobile ? 0 : 2.2, -1.29, -0.06)
-  scene.add(scooterShadow)
-
-  const ambient = new THREE.AmbientLight(0xffffff, 0.02)
+  const ambient = new THREE.AmbientLight(0xffffff, 0.1)
   scene.add(ambient)
 
-  const hemi = new THREE.HemisphereLight(0xffffff, 0x7c8784, options.mobile ? 0.42 : 0.52)
+  const hemi = new THREE.HemisphereLight(0xffffff, 0x7c8784, options.mobile ? 0.48 : 0.58)
   hemi.position.set(0, 4, 0)
   scene.add(hemi)
 
-  const keyLight = new THREE.SpotLight(0xfff0c2, options.mobile ? 6.2 : 8, 24, 0.32, 0.8, 1.1)
-  keyLight.position.set(-3.1, 4.2, 5.2)
-  keyLight.target.position.set(options.mobile ? 0 : -1.3, 0.4, -0.6)
+  const keyLight = new THREE.SpotLight(0xfff0c4, options.mobile ? 6 : 7.6, 24, 0.3, 0.82, 1.1)
+  keyLight.position.set(-3.2, 4.1, 5.1)
+  keyLight.target.position.set(options.mobile ? 0 : -1.35, 0.4, -0.6)
   scene.add(keyLight)
   scene.add(keyLight.target)
 
-  const scooterLight = new THREE.SpotLight(0xffffff, options.mobile ? 6.6 : 7.8, 18, 0.34, 0.82, 1.1)
-  scooterLight.position.set(options.mobile ? 1.4 : 4.8, 2.2, 3.2)
-  scooterLight.target = scooterGroup
+  const rimLight = new THREE.DirectionalLight(0xffffff, options.mobile ? 0.58 : 0.68)
+  rimLight.position.set(-2, 2, 3)
+  scene.add(rimLight)
+
+  const scooterLight = new THREE.SpotLight(0xf3f7f4, options.mobile ? 5.8 : 6.8, 20, 0.34, 0.82, 1.1)
+  scooterLight.position.set(options.mobile ? 1.4 : 4.9, 2.3, 3.4)
+  scooterLight.target = scooterAnchor
   scene.add(scooterLight)
   scene.add(scooterLight.target)
 
@@ -228,14 +199,14 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     new THREE.PlaneGeometry(0.28, options.mobile ? 2.8 : 3.8),
     new THREE.MeshBasicMaterial({ color: 0xf3e2a6, transparent: true, opacity: 0.02, blending: THREE.AdditiveBlending }),
   )
-  sweep.position.set(options.mobile ? -0.8 : -2.8, 0.22, 0.95)
+  sweep.position.set(options.mobile ? -0.6 : -2.4, 0.22, 1)
   sweep.rotation.z = 0.12
   scene.add(sweep)
 
   const vignette = new THREE.Mesh(
     new THREE.PlaneGeometry(15, 9),
     new THREE.ShaderMaterial({
-      uniforms: { uOpacity: { value: 0.24 } },
+      uniforms: { uOpacity: { value: 0.18 } },
       transparent: true,
       depthWrite: false,
       vertexShader: `
@@ -263,6 +234,17 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   let progress = 0
   let disposed = false
+  let svgScene: ReturnType<typeof buildSvgScooter> | null = null
+
+  fetch(scooterSvgUrl)
+    .then((response) => response.text())
+    .then((svgText) => {
+      if (disposed) return
+      svgScene = buildSvgScooter(svgText, options)
+      scooterAnchor.add(svgScene.group)
+      svgScene.group.position.set(0, 0, 0)
+    })
+    .catch(() => undefined)
 
   const resize = () => {
     if (disposed) return
@@ -290,37 +272,35 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     if (options.mobile) {
       camera.position.x = Math.sin(progress * Math.PI) * 0.015
       camera.position.y = THREE.MathUtils.lerp(0.34, 0.5, holdReveal)
-      camera.position.z = THREE.MathUtils.lerp(11.2, 8.5, progress)
-      camera.lookAt(0, THREE.MathUtils.lerp(0.44, 0.2, holdReveal), -0.45)
+      camera.position.z = THREE.MathUtils.lerp(11, 8.4, progress)
+      camera.lookAt(0, THREE.MathUtils.lerp(0.42, 0.2, holdReveal), -0.5)
     } else {
-      camera.position.x = THREE.MathUtils.lerp(0.12, 0.02, holdReveal) + Math.sin(progress * Math.PI) * 0.02
-      camera.position.y = THREE.MathUtils.lerp(0.56, 0.76, holdReveal)
-      camera.position.z = THREE.MathUtils.lerp(11.8, 8.9, progress)
-      camera.lookAt(-0.65, THREE.MathUtils.lerp(0.46, 0.22, holdReveal), -0.5)
+      camera.position.x = THREE.MathUtils.lerp(0.24, 0.06, holdReveal) + Math.sin(progress * Math.PI) * 0.02
+      camera.position.y = THREE.MathUtils.lerp(0.52, 0.74, holdReveal)
+      camera.position.z = THREE.MathUtils.lerp(11.6, 8.8, progress)
+      camera.lookAt(-0.5, THREE.MathUtils.lerp(0.44, 0.22, holdReveal), -0.5)
     }
 
-    fog.density = THREE.MathUtils.lerp(options.mobile ? 0.024 : 0.02, options.mobile ? 0.016 : 0.013, holdReveal)
+    fog.density = THREE.MathUtils.lerp(options.mobile ? 0.018 : 0.015, options.mobile ? 0.013 : 0.011, holdReveal)
 
-    ambient.intensity = THREE.MathUtils.lerp(0.08, 0.18, roomReveal)
-    hemi.intensity = THREE.MathUtils.lerp(0.24, options.mobile ? 0.5 : 0.62, roomReveal)
-    keyLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 5.8 : 7.4, logoReveal)
-    scooterLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6 : 7.2, scooterReveal)
+    ambient.intensity = THREE.MathUtils.lerp(0.04, 0.12, roomReveal)
+    hemi.intensity = THREE.MathUtils.lerp(0.18, options.mobile ? 0.46 : 0.58, roomReveal)
+    keyLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6.2 : 7.8, logoReveal)
+    rimLight.intensity = THREE.MathUtils.lerp(0.1, options.mobile ? 0.64 : 0.74, scooterReveal)
+    scooterLight.intensity = THREE.MathUtils.lerp(0.8, options.mobile ? 6 : 7, scooterReveal)
 
-    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.08, 0.22, logoReveal)
+    halo.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.04, 0.16, logoReveal)
     floorReflection.material.opacity = THREE.MathUtils.lerp(0.01, 0.08, holdReveal)
-    scooterShadow.material.opacity = THREE.MathUtils.lerp(0.04, 0.12, scooterReveal)
-    scooterShadow.scale.setScalar(THREE.MathUtils.lerp(0.84, 1.02, scooterReveal))
 
-    scooterGroup.position.y = THREE.MathUtils.lerp(0.08, options.mobile ? -0.08 : -0.02, scooterReveal)
-    scooterGroup.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.14 : -0.2, options.mobile ? -0.04 : -0.1, holdReveal)
-    scooterGroup.scale.setScalar(THREE.MathUtils.lerp(0.96, 1.04, scooterReveal))
+    scooterAnchor.position.y = THREE.MathUtils.lerp(0.08, options.mobile ? 0.02 : -0.02, scooterReveal)
+    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.1 : -0.26, options.mobile ? -0.02 : -0.14, holdReveal)
+    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.96, 1.03, scooterReveal))
 
-    edgeMaterial.opacity = THREE.MathUtils.lerp(0.04, options.mobile ? 0.3 : 0.38, scooterReveal)
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.07, Math.sin(logoReveal * Math.PI))
-    sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.8 : -2.8, options.mobile ? 0.8 : -0.5, logoReveal)
+    sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.6 : -2.4, options.mobile ? 0.7 : -0.4, logoReveal)
 
-    backdrop.material.opacity = THREE.MathUtils.lerp(1, 0.9, blackOpening)
-    vignette.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.26, 0.18, holdReveal)
+    backdrop.material.opacity = THREE.MathUtils.lerp(1, 0.92, blackOpening)
+    vignette.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.2, 0.12, holdReveal)
 
     renderer.render(scene, camera)
   }
@@ -328,36 +308,19 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const dispose = () => {
     disposed = true
     renderer.dispose()
-    floor.geometry.dispose()
     ;(floor.material as THREE.Material).dispose()
-    floorReflection.geometry.dispose()
+    floor.geometry.dispose()
     ;(floorReflection.material as THREE.Material).dispose()
-    backdrop.geometry.dispose()
+    floorReflection.geometry.dispose()
     ;(backdrop.material as THREE.Material).dispose()
-    halo.geometry.dispose()
+    backdrop.geometry.dispose()
     halo.material.dispose()
-    silhouetteMaterial.dispose()
-    edgeMaterial.dispose()
-    body.geometry.dispose()
-    frontShield.geometry.dispose()
-    rearBody.geometry.dispose()
-    seat.geometry.dispose()
-    neck.geometry.dispose()
-    handlebar.geometry.dispose()
-    leftMirror.geometry.dispose()
-    windshield.geometry.dispose()
-    topCase.geometry.dispose()
-    floorboard.geometry.dispose()
-    ;(frontWheel.geometry as THREE.BufferGeometry).dispose()
-    ;(frontWheel.material as THREE.Material).dispose()
-    upperEdge.geometry.dispose()
-    lowerEdge.geometry.dispose()
-    scooterShadow.geometry.dispose()
-    ;(scooterShadow.material as THREE.Material).dispose()
-    sweep.geometry.dispose()
+    halo.geometry.dispose()
     ;(sweep.material as THREE.Material).dispose()
-    vignette.geometry.dispose()
+    sweep.geometry.dispose()
     vignette.material.dispose()
+    vignette.geometry.dispose()
+    svgScene?.dispose()
     if (renderer.domElement.parentElement === container) {
       container.removeChild(renderer.domElement)
     }
