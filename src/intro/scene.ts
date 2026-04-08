@@ -1,4 +1,6 @@
 import * as THREE from 'three'
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
+import scooterCleanSvgUrl from './assets/scooter-clean.svg?url'
 
 export type IntroSceneController = {
   canvas: HTMLCanvasElement
@@ -15,10 +17,15 @@ export type IntroSceneOptions = {
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 
-function buildScooterSilhouette(options: IntroSceneOptions) {
+function buildScooterSilhouette(svgText: string, options: IntroSceneOptions) {
+  const loader = new SVGLoader()
+  const data = loader.parse(svgText)
+  const wrapper = new THREE.Group()
   const group = new THREE.Group()
-  const material = new THREE.MeshBasicMaterial({
-    color: 0x171b1c,
+  wrapper.add(group)
+
+  const fillMaterial = new THREE.MeshBasicMaterial({
+    color: 0x161a1b,
     side: THREE.DoubleSide,
   })
   const shadowMaterial = new THREE.MeshBasicMaterial({
@@ -28,92 +35,33 @@ function buildScooterSilhouette(options: IntroSceneOptions) {
     side: THREE.DoubleSide,
   })
 
-  const makeShapeMesh = (shape: THREE.Shape, z = 0) => {
-    const geometry = new THREE.ShapeGeometry(shape)
-    const shadow = new THREE.Mesh(geometry, shadowMaterial)
-    shadow.position.set(0.06, -0.04, z - 0.02)
-    const mesh = new THREE.Mesh(geometry, material)
-    mesh.position.z = z
-    group.add(shadow)
-    group.add(mesh)
-  }
+  data.paths.forEach((path) => {
+    const shapes = SVGLoader.createShapes(path)
+    shapes.forEach((shape) => {
+      const geometry = new THREE.ShapeGeometry(shape)
+      const shadow = new THREE.Mesh(geometry, shadowMaterial)
+      shadow.position.set(0.08, -0.05, -0.02)
+      group.add(shadow)
 
-  const body = new THREE.Shape()
-  body.moveTo(-3.3, -0.2)
-  body.quadraticCurveTo(-2.8, -1.05, -1.75, -1.05)
-  body.lineTo(-0.3, -1.06)
-  body.quadraticCurveTo(0.55, -1.08, 1.1, -0.72)
-  body.lineTo(1.9, -0.18)
-  body.quadraticCurveTo(2.55, 0.24, 2.48, 0.78)
-  body.lineTo(1.7, 0.78)
-  body.quadraticCurveTo(1.05, 0.76, 0.52, 0.5)
-  body.lineTo(-0.45, 0.08)
-  body.quadraticCurveTo(-1.15, -0.22, -2.35, -0.02)
-  body.lineTo(-3.3, 0.12)
-  body.quadraticCurveTo(-3.62, 0.12, -3.68, -0.04)
-  body.quadraticCurveTo(-3.7, -0.16, -3.3, -0.2)
-  makeShapeMesh(body)
+      const mesh = new THREE.Mesh(geometry, fillMaterial)
+      group.add(mesh)
+    })
+  })
 
-  const seat = new THREE.Shape()
-  seat.moveTo(-0.48, 0.2)
-  seat.quadraticCurveTo(0.1, 0.62, 0.85, 0.64)
-  seat.lineTo(1.18, 0.64)
-  seat.quadraticCurveTo(1.42, 0.64, 1.44, 0.82)
-  seat.quadraticCurveTo(1.43, 1.0, 1.12, 1.05)
-  seat.lineTo(0.38, 1.12)
-  seat.quadraticCurveTo(-0.36, 1.14, -0.82, 0.74)
-  seat.lineTo(-0.98, 0.54)
-  seat.quadraticCurveTo(-1.05, 0.34, -0.86, 0.24)
-  seat.quadraticCurveTo(-0.72, 0.16, -0.48, 0.2)
-  makeShapeMesh(seat, 0.01)
+  const box = new THREE.Box3().setFromObject(group)
+  const size = box.getSize(new THREE.Vector3())
+  const center = box.getCenter(new THREE.Vector3())
+  group.position.set(-center.x, -center.y, 0)
 
-  const front = new THREE.Shape()
-  front.moveTo(1.05, 0.72)
-  front.lineTo(1.35, 2.08)
-  front.quadraticCurveTo(1.42, 2.42, 1.7, 2.56)
-  front.lineTo(1.9, 2.66)
-  front.quadraticCurveTo(2.08, 2.8, 1.9, 2.94)
-  front.lineTo(1.48, 2.94)
-  front.quadraticCurveTo(1.1, 2.94, 0.95, 2.52)
-  front.lineTo(0.62, 1.38)
-  front.quadraticCurveTo(0.5, 0.98, 0.72, 0.8)
-  front.quadraticCurveTo(0.86, 0.7, 1.05, 0.72)
-  makeShapeMesh(front, 0.02)
-
-  const deck = new THREE.Shape()
-  deck.moveTo(-2.3, -0.16)
-  deck.lineTo(0.28, -0.16)
-  deck.quadraticCurveTo(0.45, -0.16, 0.48, -0.02)
-  deck.quadraticCurveTo(0.48, 0.12, 0.28, 0.16)
-  deck.lineTo(-2.1, 0.16)
-  deck.quadraticCurveTo(-2.52, 0.16, -2.46, -0.04)
-  deck.quadraticCurveTo(-2.45, -0.12, -2.3, -0.16)
-  makeShapeMesh(deck, 0.03)
-
-  const rearWheel = new THREE.Path()
-  rearWheel.absellipse(-2.28, -1.16, 0.76, 0.76, 0, Math.PI * 2, false)
-  const rearWheelShape = new THREE.Shape()
-  rearWheelShape.absellipse(-2.28, -1.16, 0.76, 0.76, 0, Math.PI * 2, false)
-  const rearWheelHole = new THREE.Path()
-  rearWheelHole.absellipse(-2.28, -1.16, 0.36, 0.36, 0, Math.PI * 2, true)
-  rearWheelShape.holes.push(rearWheelHole)
-  makeShapeMesh(rearWheelShape, 0.05)
-
-  const frontWheelShape = new THREE.Shape()
-  frontWheelShape.absellipse(1.68, -1.1, 0.84, 0.84, 0, Math.PI * 2, false)
-  const frontWheelHole = new THREE.Path()
-  frontWheelHole.absellipse(1.68, -1.1, 0.4, 0.4, 0, Math.PI * 2, true)
-  frontWheelShape.holes.push(frontWheelHole)
-  makeShapeMesh(frontWheelShape, 0.05)
-
-  const scale = options.mobile ? 0.8 : 0.92
-  group.scale.setScalar(scale)
-  group.position.set(0, options.mobile ? -0.42 : -0.38, 0)
+  const targetWidth = options.mobile ? 5.1 : 5.9
+  const fitScale = targetWidth / Math.max(size.x, 1)
+  wrapper.scale.set(fitScale, -fitScale, 1)
+  wrapper.position.set(0, options.mobile ? -0.64 : -0.62, 0)
 
   return {
-    group,
+    group: wrapper,
     dispose: () => {
-      material.dispose()
+      fillMaterial.dispose()
       shadowMaterial.dispose()
       group.traverse((child) => {
         if (child instanceof THREE.Mesh) {
@@ -271,8 +219,16 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
 
   let progress = 0
   let disposed = false
-  const scooterScene = buildScooterSilhouette(options)
-  scooterAnchor.add(scooterScene.group)
+  let scooterScene: ReturnType<typeof buildScooterSilhouette> | null = null
+
+  fetch(scooterCleanSvgUrl)
+    .then((response) => response.text())
+    .then((svgText) => {
+      if (disposed) return
+      scooterScene = buildScooterSilhouette(svgText, options)
+      scooterAnchor.add(scooterScene.group)
+    })
+    .catch(() => undefined)
 
   const resize = () => {
     if (disposed) return
@@ -349,7 +305,7 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     sweep.geometry.dispose()
     vignette.material.dispose()
     vignette.geometry.dispose()
-    scooterScene.dispose()
+    scooterScene?.dispose()
     if (renderer.domElement.parentElement === container) {
       container.removeChild(renderer.domElement)
     }
