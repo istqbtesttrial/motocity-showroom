@@ -483,23 +483,170 @@ h3 { font-size: 1.35rem; }
   .brand-grid,
   .model-panel,
   .comparison-pickers,
-  .compare-duo {
+  .compare-duo,
+  .hero-grid {
     grid-template-columns: 1fr;
+  }
+
+  .page-shell {
+    width: min(100% - 16px, 1280px);
+    padding-top: 10px;
+    padding-bottom: 24px;
+  }
+
+  .app-layout {
+    gap: 14px;
   }
 
   .sidebar-card {
     position: static;
+    top: auto;
+    padding: 14px;
   }
 
-  .page-shell {
-    width: min(100% - 20px, 1280px);
-    padding-top: 16px;
+  .sidebar-nav {
+    gap: 14px;
+  }
+
+  .nav-item {
+    margin-bottom: 6px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+  }
+
+  .nav-chip {
+    padding: 7px 10px;
+    font-size: 0.78rem;
+    margin: 0 6px 6px 0;
+  }
+
+  .sidebar-title {
+    font-size: 1.15rem;
+  }
+
+  .brand-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    font-size: 0.95rem;
   }
 
   .sidebar-card,
   .hero-card,
   .section-block {
-    padding: 20px;
-    border-radius: 22px;
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  h1 {
+    font-size: clamp(1.9rem, 9vw, 2.5rem);
+    max-width: 100%;
+  }
+
+  h2 {
+    font-size: clamp(1.35rem, 6vw, 1.8rem);
+  }
+
+  h3 {
+    font-size: 1.12rem;
+  }
+
+  .lead,
+  .product-card p,
+  .product-body p,
+  .model-copy p,
+  .detail-meta,
+  .compare-list {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  .cta-row {
+    gap: 10px;
+  }
+
+  .primary-button,
+  .secondary-button,
+  .product-link {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .product-image,
+  .compare-image {
+    height: 180px;
+    padding: 14px;
+  }
+
+  .model-image {
+    min-height: 220px;
+    padding: 16px;
+  }
+
+  .product-body,
+  .model-copy {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .spec-list {
+    gap: 8px;
+  }
+
+  .spec-list li {
+    font-size: 0.82rem;
+    padding: 7px 10px;
+  }
+
+  .meta-row {
+    gap: 8px;
+  }
+
+  .price-tag {
+    font-size: 1rem;
+  }
+
+  .detail-price {
+    font-size: 1.1rem;
+  }
+
+  .comparison-pickers {
+    gap: 12px;
+  }
+
+  .picker-field select {
+    padding: 12px 14px;
+  }
+
+  .compare-list {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 12px, 1280px);
+  }
+
+  .sidebar-card {
+    overflow-x: auto;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-static-orb {
+    width: 120px;
+    height: 120px;
+  }
+
+  .intro-lite-logo {
+    width: min(180px, 56vw);
+  }
+
+  .intro-lite-text {
+    font-size: 0.95rem;
   }
 }
