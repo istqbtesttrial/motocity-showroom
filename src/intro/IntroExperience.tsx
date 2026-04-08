@@ -73,13 +73,14 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
     if (content) {
       textTl
         .fromTo('.intro-skip', { opacity: 0 }, { opacity: 0.72, duration: 0.6, delay: 0.45 })
-        .fromTo('.intro-scooter-overlay', { y: 64, opacity: 0, scale: 0.42, filter: 'blur(16px)' }, { y: 0, opacity: 0.96, scale: 1, filter: 'blur(0px)', duration: 3.2, ease: 'power3.out', delay: 1.15 }, 0)
-        .fromTo('.intro-logo-shell', { y: 24, opacity: 0, scale: 0.94 }, { y: 0, opacity: 1, scale: 1, duration: 1.05, ease: 'power3.out' }, '+=1.4')
-        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.4, duration: 1.0, ease: 'power2.inOut' }, '-=0.12')
-        .fromTo('.intro-brand', { y: 18, opacity: 0, letterSpacing: '0.24em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 0.95, ease: 'power3.out' }, '-=0.48')
-        .fromTo('.intro-divider', { scaleX: 0.5, opacity: 0 }, { scaleX: 1, opacity: 0.56, duration: 0.7, ease: 'power2.out' }, '-=0.5')
-        .fromTo('.intro-subcopy', { y: 12, opacity: 0 }, { y: 0, opacity: 0.72, duration: 0.85, ease: 'power2.out' }, '-=0.18')
-        .to({}, { duration: 1.6 })
+        .fromTo('.intro-scooter-overlay', { x: -140, y: 20, opacity: 0, scale: 0.34, rotation: -4, filter: 'blur(18px)' }, { x: 0, y: 0, opacity: 0.98, scale: 1, rotation: 0, filter: 'blur(0px)', duration: 3.4, ease: 'power3.out', delay: 0.9 }, 0)
+        .fromTo('.intro-brand-block', { x: 42, opacity: 0 }, { x: 0, opacity: 1, duration: 1.1, ease: 'power3.out' }, '+=1.95')
+        .fromTo('.intro-logo-shell', { y: 18, opacity: 0, scale: 0.95 }, { y: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out' }, '-=0.75')
+        .fromTo('.intro-logo-sweep', { xPercent: -140, opacity: 0 }, { xPercent: 145, opacity: 0.38, duration: 1.0, ease: 'power2.inOut' }, '-=0.08')
+        .fromTo('.intro-brand', { y: 14, opacity: 0, letterSpacing: '0.24em' }, { y: 0, opacity: 1, letterSpacing: '0.16em', duration: 0.9, ease: 'power3.out' }, '-=0.44')
+        .fromTo('.intro-divider', { scaleX: 0.5, opacity: 0 }, { scaleX: 1, opacity: 0.56, duration: 0.65, ease: 'power2.out' }, '-=0.45')
+        .fromTo('.intro-subcopy', { y: 10, opacity: 0 }, { y: 0, opacity: 0.72, duration: 0.8, ease: 'power2.out' }, '-=0.16')
+        .to({}, { duration: 1.4 })
     }
 
     const handleResize = () => scene.resize()
@@ -168,20 +169,25 @@ export function IntroExperience({ onComplete }: IntroExperienceProps) {
       )}
 
       <div className="intro-overlay">
-        <p className="intro-kicker">Showroom opening sequence</p>
-        <div className="intro-logo-shell">
-          <div className="intro-logo-badge">
-            <img src={motoCityLogo} alt="MotoCity" className="intro-logo-image" />
-            <div className="intro-logo-sweep" aria-hidden="true" />
+        <div className="intro-scooter-stage" aria-hidden="true">
+          <div className="intro-scooter-overlay">
+            <img src={scooterOverlay} alt="" className="intro-scooter-image" />
+            <div className="intro-scooter-glow" />
           </div>
         </div>
-        <div className="intro-scooter-overlay" aria-hidden="true">
-          <img src={scooterOverlay} alt="" className="intro-scooter-image" />
-          <div className="intro-scooter-glow" />
+
+        <div className="intro-brand-block">
+          <p className="intro-kicker">Showroom opening sequence</p>
+          <div className="intro-logo-shell">
+            <div className="intro-logo-badge">
+              <img src={motoCityLogo} alt="MotoCity" className="intro-logo-image" />
+              <div className="intro-logo-sweep" aria-hidden="true" />
+            </div>
+          </div>
+          <h1 className="intro-brand">MotoCity</h1>
+          <div className="intro-divider" aria-hidden="true" />
+          <p className="intro-subcopy">Le scooter surgit de la profondeur, prend sa place dans le showroom, puis la marque s’impose avec calme.</p>
         </div>
-        <h1 className="intro-brand">MotoCity</h1>
-        <div className="intro-divider" aria-hidden="true" />
-        <p className="intro-subcopy">Le badge MotoCity prend le premier plan pendant qu’une silhouette de scooter, posée à côté, s’installe dans une lumière showroom douce et maîtrisée.</p>
       </div>
 
       <button type="button" className="intro-skip" onClick={handleSkip} aria-label="Passer l’introduction">
