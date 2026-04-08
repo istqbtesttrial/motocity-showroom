@@ -1,12 +1,8 @@
 import './App.css'
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { Suspense, lazy, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { scooterBrands, scooters, categories } from './data'
-import loadingScooter from './animations/loading-scooter.json'
-import motoCityLogo from './assets/motocity-logo.jpg'
-
-const Lottie = lazy(() => import('lottie-react'))
 
 function useReveal() {
   const ref = useRef<HTMLDivElement | null>(null)
@@ -45,64 +41,9 @@ function RouteTransition({ children }: { children: React.ReactNode }) {
   return <div ref={ref}>{children}</div>
 }
 
-function IntroGate() {
-  const [done, setDone] = useState(false)
-  const gateRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const alreadySeen = sessionStorage.getItem('motocity-intro-seen')
-    if (alreadySeen) {
-      setDone(true)
-      return
-    }
-
-    if (!gateRef.current) return
-
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
-          sessionStorage.setItem('motocity-intro-seen', '1')
-          setDone(true)
-        },
-      })
-
-      tl.fromTo('.intro-logo-wrap', { scale: 0.82, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: 'power3.out' })
-        .fromTo('.intro-glow', { opacity: 0 }, { opacity: 1, duration: 0.4 }, '<')
-        .to('.intro-door-left', { xPercent: -105, duration: 1.1, ease: 'power4.inOut' }, '+=0.35')
-        .to('.intro-door-right', { xPercent: 105, duration: 1.1, ease: 'power4.inOut' }, '<')
-        .to('.intro-logo-wrap', { scale: 0.92, opacity: 0, duration: 0.45 }, '<0.2')
-        .to('.intro-gate', { autoAlpha: 0, duration: 0.35 }, '-=0.2')
-    }, gateRef)
-
-    return () => ctx.revert()
-  }, [])
-
-  if (done) return null
-
-  return (
-    <div className="intro-gate" ref={gateRef}>
-      <div className="intro-showroom">
-        <div className="intro-showroom-lights" />
-        <div className="intro-showroom-floor" />
-        <div className="intro-showroom-center-glow" />
-      </div>
-      <div className="intro-door intro-door-left" />
-      <div className="intro-door intro-door-right" />
-      <div className="intro-glow" />
-      <div className="intro-logo-wrap">
-        <img src={motoCityLogo} alt="MotoCity" className="intro-logo" />
-        <p className="intro-text">Bienvenue chez MotoCity</p>
-        <p className="intro-subtext">Entrez dans un showroom pensé pour la route, le style et l’expérience.</p>
-      </div>
-    </div>
-  )
-}
-
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <IntroGate />
-      <main className="page-shell app-layout">
+    <main className="page-shell app-layout">
         <aside className="sidebar-card" data-animate="fade-up">
           <div className="brand-block brand-block-sidebar">
             <div className="brand-mark interactive-mark">MC</div>
@@ -143,7 +84,6 @@ function Shell({ children }: { children: React.ReactNode }) {
           <RouteTransition>{children}</RouteTransition>
         </section>
       </main>
-    </>
   )
 }
 
@@ -167,9 +107,7 @@ function HomePage() {
             </div>
           </div>
           <div className="hero-loader" data-animate="fade-up">
-            <Suspense fallback={<div className="hero-lottie hero-lottie-fallback" />}>
-              <Lottie animationData={loadingScooter} loop className="hero-lottie" />
-            </Suspense>
+            <div className="hero-static-orb" />
           </div>
         </div>
       </section>
