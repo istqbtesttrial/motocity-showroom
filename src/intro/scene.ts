@@ -21,37 +21,74 @@ function buildScooterSilhouette(svgText: string, options: IntroSceneOptions) {
   const loader = new SVGLoader()
   const data = loader.parse(svgText)
   const wrapper = new THREE.Group()
-  const group = new THREE.Group()
-  wrapper.add(group)
+  const shadowGroup = new THREE.Group()
+  const baseGroup = new THREE.Group()
+  const highlightGroup = new THREE.Group()
+  const wheelGlowGroup = new THREE.Group()
+  wrapper.add(shadowGroup)
+  wrapper.add(wheelGlowGroup)
+  wrapper.add(baseGroup)
+  wrapper.add(highlightGroup)
 
-  const fillMaterial = new THREE.MeshBasicMaterial({
-    color: 0x161a1b,
-    side: THREE.DoubleSide,
-  })
   const shadowMaterial = new THREE.MeshBasicMaterial({
-    color: 0xe7dfcf,
+    color: 0xe8ddc2,
     transparent: true,
     opacity: 0.08,
     side: THREE.DoubleSide,
+  })
+  const baseMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x1a201f,
+    metalness: 0.18,
+    roughness: 0.62,
+    clearcoat: 0.18,
+    clearcoatRoughness: 0.72,
+    side: THREE.DoubleSide,
+  })
+  const highlightMaterial = new THREE.MeshBasicMaterial({
+    color: 0xaeb7b2,
+    transparent: true,
+    opacity: 0.17,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
+  })
+  const wheelGlowMaterial = new THREE.MeshBasicMaterial({
+    color: 0xd6bb73,
+    transparent: true,
+    opacity: 0.05,
+    side: THREE.DoubleSide,
+    blending: THREE.AdditiveBlending,
   })
 
   data.paths.forEach((path) => {
     const shapes = SVGLoader.createShapes(path)
     shapes.forEach((shape) => {
       const geometry = new THREE.ShapeGeometry(shape)
-      const shadow = new THREE.Mesh(geometry, shadowMaterial)
-      shadow.position.set(0.08, -0.05, -0.02)
-      group.add(shadow)
 
-      const mesh = new THREE.Mesh(geometry, fillMaterial)
-      group.add(mesh)
+      const shadow = new THREE.Mesh(geometry, shadowMaterial)
+      shadow.position.set(0.1, -0.06, -0.03)
+      shadowGroup.add(shadow)
+
+      const base = new THREE.Mesh(geometry, baseMaterial)
+      baseGroup.add(base)
+
+      const highlight = new THREE.Mesh(geometry, highlightMaterial)
+      highlight.scale.set(0.987, 0.987, 1)
+      highlight.position.set(-0.18, 0.14, 0.02)
+      highlightGroup.add(highlight)
+
+      const wheelGlow = new THREE.Mesh(geometry, wheelGlowMaterial)
+      wheelGlow.scale.set(0.978, 0.978, 1)
+      wheelGlow.position.set(0.02, -0.02, -0.01)
+      wheelGlowGroup.add(wheelGlow)
     })
   })
 
-  const box = new THREE.Box3().setFromObject(group)
+  const box = new THREE.Box3().setFromObject(baseGroup)
   const size = box.getSize(new THREE.Vector3())
   const center = box.getCenter(new THREE.Vector3())
-  group.position.set(-center.x, -center.y, 0)
+  ;[shadowGroup, baseGroup, highlightGroup, wheelGlowGroup].forEach((g) => {
+    g.position.set(-center.x, -center.y, 0)
+  })
 
   const targetWidth = options.mobile ? 5.1 : 5.9
   const fitScale = targetWidth / Math.max(size.x, 1)
@@ -61,9 +98,11 @@ function buildScooterSilhouette(svgText: string, options: IntroSceneOptions) {
   return {
     group: wrapper,
     dispose: () => {
-      fillMaterial.dispose()
       shadowMaterial.dispose()
-      group.traverse((child) => {
+      baseMaterial.dispose()
+      highlightMaterial.dispose()
+      wheelGlowMaterial.dispose()
+      wrapper.traverse((child) => {
         if (child instanceof THREE.Mesh) {
           child.geometry.dispose()
         }
