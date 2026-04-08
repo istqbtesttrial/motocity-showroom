@@ -1,9 +1,9 @@
 import './App.css'
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { scooterBrands, scooters, categories } from './data'
-import motoCityLogo from './assets/motocity-logo.jpg'
+import { IntroExperience } from './intro/IntroExperience'
 
 function useReveal() {
   const ref = useRef<HTMLDivElement | null>(null)
@@ -43,45 +43,14 @@ function RouteTransition({ children }: { children: React.ReactNode }) {
 }
 
 function IntroGate() {
-  const [done, setDone] = useState(false)
-  const ref = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    const seen = sessionStorage.getItem('motocity-intro-lite-seen')
-    if (seen) {
-      setDone(true)
-      return
-    }
-    if (!ref.current) return
-
-    const ctx = gsap.context(() => {
-      gsap.timeline({
-        onComplete: () => {
-          sessionStorage.setItem('motocity-intro-lite-seen', '1')
-          setDone(true)
-        },
-      })
-        .fromTo('.intro-lite-logo', { scale: 0.88, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: 'power3.out' })
-        .to('.intro-lite-left', { xPercent: -102, duration: 0.95, ease: 'power4.inOut' }, '+=0.25')
-        .to('.intro-lite-right', { xPercent: 102, duration: 0.95, ease: 'power4.inOut' }, '<')
-        .to('.intro-lite', { autoAlpha: 0, duration: 0.25 }, '-=0.15')
-    }, ref)
-
-    return () => ctx.revert()
-  }, [])
+  const [done, setDone] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return sessionStorage.getItem('motocity-intro-three-seen') === '1'
+  })
 
   if (done) return null
 
-  return (
-    <div className="intro-lite" ref={ref}>
-      <div className="intro-lite-left" />
-      <div className="intro-lite-right" />
-      <div className="intro-lite-center">
-        <img src={motoCityLogo} alt="MotoCity" className="intro-lite-logo" />
-        <p className="intro-lite-text">Bienvenue chez MotoCity</p>
-      </div>
-    </div>
-  )
+  return <IntroExperience onComplete={() => setDone(true)} />
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
