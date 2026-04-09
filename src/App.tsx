@@ -70,6 +70,7 @@ function Shell({ children }: { children: React.ReactNode }) {
             <NavLink to="/" end className="mobile-nav-pill">Accueil</NavLink>
             <NavLink to="/scooters" className="mobile-nav-pill">Scooters</NavLink>
             <NavLink to="/comparaison" className="mobile-nav-pill">Comparer</NavLink>
+            <a href="#contact" className="mobile-nav-pill">Contact</a>
           </nav>
         </header>
 
@@ -83,6 +84,14 @@ function Shell({ children }: { children: React.ReactNode }) {
           </div>
 
           <nav className="sidebar-nav">
+            <div>
+              <p className="nav-group-title">Accès rapide</p>
+              <a href="#models" className="nav-item">Modèles</a>
+              <a href="#brands" className="nav-item">Marques</a>
+              <a href="#payment" className="nav-item">Facilités</a>
+              <a href="#contact" className="nav-item">Contact</a>
+            </div>
+
             <div>
               <p className="nav-group-title">Pages</p>
               <NavLink to="/" end className="nav-item">Accueil</NavLink>
@@ -123,7 +132,7 @@ function HomePage() {
 
   return (
     <div ref={ref}>
-      <section className="hero-card hero-animated" data-animate="fade-up">
+      <section className="hero-card hero-animated section-anchor" id="top" data-animate="fade-up">
         <div className="hero-grid">
           <div className="hero-copy">
             <p className="eyebrow" data-animate="fade-up">Showroom tunisien de scooters</p>
@@ -158,7 +167,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section-block" data-animate="fade-up">
+      <section className="section-block section-anchor" id="models" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Modèles</p>
           <h2>Quelques scooters à découvrir</h2>
@@ -170,7 +179,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section-block" data-animate="fade-up">
+      <section className="section-block section-anchor" id="brands" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Marques</p>
           <h2>Explorer les scooters par marque</h2>
@@ -195,7 +204,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section-block" data-animate="fade-up">
+      <section className="section-block section-anchor" id="why" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Pourquoi MotoCity</p>
           <h2>Un showroom pensé pour la mobilité urbaine</h2>
@@ -216,7 +225,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section-block" data-animate="fade-up">
+      <section className="section-block section-anchor" id="payment" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Facilités</p>
           <h2>Des solutions de paiement adaptées</h2>
@@ -237,7 +246,7 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="section-block contact-section" data-animate="fade-up">
+      <section className="section-block contact-section section-anchor" id="contact" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Visite showroom</p>
           <h2>Moto City Sahline, route Jammel</h2>
