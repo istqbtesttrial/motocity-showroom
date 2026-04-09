@@ -160,6 +160,18 @@ function HomePage() {
 
       <section className="section-block" data-animate="fade-up">
         <div className="section-heading">
+          <p className="eyebrow">Modèles</p>
+          <h2>Quelques scooters à découvrir</h2>
+        </div>
+        <div className="cards-grid scooters-grid home-models-grid">
+          {featured.map((scooter) => (
+            <ProductCard key={scooter.id} scooter={scooter} detailLink={`/scooters/${scooter.id}`} />
+          ))}
+        </div>
+      </section>
+
+      <section className="section-block" data-animate="fade-up">
+        <div className="section-heading">
           <p className="eyebrow">Marques</p>
           <h2>Explorer les scooters par marque</h2>
         </div>
@@ -180,6 +192,51 @@ function HomePage() {
               </NavLink>
             )
           })}
+        </div>
+      </section>
+
+      <section className="section-block" data-animate="fade-up">
+        <div className="section-heading">
+          <p className="eyebrow">Pourquoi MotoCity</p>
+          <h2>Un showroom pensé pour la mobilité urbaine</h2>
+        </div>
+        <div className="cards-grid value-grid">
+          <article className="product-card hover-card">
+            <h3>Design moderne</h3>
+            <p>Une sélection de scooters au style urbain, sport et premium.</p>
+          </article>
+          <article className="product-card hover-card">
+            <h3>Mobilité au quotidien</h3>
+            <p>Des modèles adaptés à la ville, aux trajets quotidiens et au confort.</p>
+          </article>
+          <article className="product-card hover-card">
+            <h3>Entretien & suivi</h3>
+            <p>Un showroom qui met en avant les marques, les fiches et le suivi des modèles.</p>
+          </article>
+        </div>
+      </section>
+
+      <section className="section-block contact-section" data-animate="fade-up">
+        <div className="section-heading">
+          <p className="eyebrow">Visite showroom</p>
+          <h2>Prendre contact avec MotoCity</h2>
+        </div>
+        <div className="contact-grid">
+          <div className="contact-card">
+            <h3>Showroom</h3>
+            <p>Tunis, Tunisie</p>
+            <p>Ouvert pour découverte modèles et comparaison sur place.</p>
+          </div>
+          <div className="contact-card">
+            <h3>Téléphone</h3>
+            <p>+216 00 000 000</p>
+            <p>Contact rapide pour disponibilité, prix et renseignements.</p>
+          </div>
+          <div className="contact-card contact-card-cta">
+            <h3>Essai & visite</h3>
+            <p>Réserve une visite showroom ou un essai selon les modèles disponibles.</p>
+            <a className="primary-button animated-button" href="tel:+21600000000">Réserver un essai</a>
+          </div>
         </div>
       </section>
     </div>
