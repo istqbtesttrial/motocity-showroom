@@ -264,6 +264,7 @@ function HomePage() {
             <h3>Réseaux sociaux</h3>
             <a className="contact-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook Moto City</a>
             <a className="contact-link" href="https://www.instagram.com/motocitys/" target="_blank" rel="noreferrer">Instagram @motocitys</a>
+            <a className="contact-link" href="https://tiktok.com/@motocity25" target="_blank" rel="noreferrer">TikTok @motocity25</a>
             <p>Communication active, offres et contenu showroom.</p>
           </div>
           <div className="contact-card contact-card-cta">
