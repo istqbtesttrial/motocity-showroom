@@ -289,6 +289,16 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.015) 50%, transparent 100%);
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+
 .hero-animated {
   overflow: hidden;
 }
@@ -457,19 +467,24 @@ ul { margin: 0; }
 }
 
 h1 {
-  font-size: clamp(2.4rem, 5vw, 4.6rem);
-  line-height: 0.98;
-  letter-spacing: -0.04em;
+  font-family: Manrope, Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.6rem, 5vw, 4.9rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
   max-width: 12ch;
 }
 
 h2 {
-  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  font-family: Manrope, Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
 }
 
-h3 { font-size: 1.35rem; }
+h3 {
+  font-family: Manrope, Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.35rem;
+}
 
 .lead,
 .product-card p,
@@ -524,7 +539,7 @@ h3 { font-size: 1.35rem; }
 }
 
 .hero-card,
-.section-block { padding: 28px; }
+.section-block { padding: 32px; }
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
@@ -546,6 +561,17 @@ h3 { font-size: 1.35rem; }
     radial-gradient(circle at 50% 42%, rgba(255,255,255,0.08), transparent 24%),
     linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
   border: 1px solid rgba(255,255,255,0.06);
+}
+
+.hero-showcase::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 140px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(240, 138, 36, 0.92), transparent);
+  z-index: 1;
 }
 
 .hero-showcase-glow {
@@ -653,7 +679,19 @@ h3 { font-size: 1.35rem; }
   font-size: 0.92rem;
 }
 .cta-row { display: flex; flex-wrap: wrap; }
-.section-heading { margin-bottom: 18px; }
+.section-heading {
+  margin-bottom: 22px;
+  display: grid;
+  gap: 6px;
+}
+
+.section-heading::after {
+  content: '';
+  width: 72px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(240, 138, 36, 0.9), rgba(255,255,255,0));
+}
 .brand-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .scooters-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .home-models-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
