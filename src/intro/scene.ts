@@ -247,10 +247,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
   const render = () => {
     if (disposed) return
 
-    const roomReveal = clamp(progress / 0.32, 0, 1)
-    const pushReveal = clamp((progress - 0.16) / 0.42, 0, 1)
-    const settleReveal = clamp((progress - 0.58) / 0.22, 0, 1)
-    const holdReveal = clamp((progress - 0.78) / 0.22, 0, 1)
+    const roomReveal = clamp(progress / 0.3, 0, 1)
+    const pushReveal = clamp((progress - 0.12) / 0.42, 0, 1)
+    const settleReveal = clamp((progress - 0.46) / 0.26, 0, 1)
+    const holdReveal = clamp((progress - 0.72) / 0.28, 0, 1)
 
     if (options.mobile) {
       camera.position.x = Math.sin(progress * Math.PI) * 0.012
@@ -276,10 +276,10 @@ export function createIntroScene(container: HTMLElement, options: IntroSceneOpti
     floorReflection.material.opacity = THREE.MathUtils.lerp(0.003, 0.04, holdReveal)
     scooterRim.material.uniforms.uOpacity.value = THREE.MathUtils.lerp(0.0, 0.18, settleReveal)
 
-    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 0.95 : 5.1, options.mobile ? 0.22 : 3.55, settleReveal)
-    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.34 : 0.28, options.mobile ? -0.02 : -0.02, settleReveal)
-    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.16 : -0.24, options.mobile ? -0.03 : -0.09, settleReveal)
-    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.72, 1.0, pushReveal))
+    scooterAnchor.position.x = THREE.MathUtils.lerp(options.mobile ? 1.05 : 5.4, options.mobile ? 0.22 : 3.55, settleReveal)
+    scooterAnchor.position.y = THREE.MathUtils.lerp(options.mobile ? 0.4 : 0.34, options.mobile ? -0.02 : -0.02, settleReveal)
+    scooterAnchor.rotation.y = THREE.MathUtils.lerp(options.mobile ? -0.18 : -0.28, options.mobile ? -0.03 : -0.09, settleReveal)
+    scooterAnchor.scale.setScalar(THREE.MathUtils.lerp(0.62, 1.0, pushReveal))
 
     sweep.material.opacity = THREE.MathUtils.lerp(0, 0.05, Math.sin(settleReveal * Math.PI))
     sweep.position.x = THREE.MathUtils.lerp(options.mobile ? -0.8 : -2.8, options.mobile ? 0.5 : -0.3, settleReveal)

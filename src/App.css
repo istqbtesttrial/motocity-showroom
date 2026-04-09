@@ -26,6 +26,22 @@
   pointer-events: none;
 }
 
+.intro-experience.is-exiting .intro-canvas-shell,
+.intro-experience.is-exiting .intro-overlay,
+.intro-experience.is-exiting .intro-blackframe {
+  transition: transform 700ms ease, opacity 700ms ease, filter 700ms ease;
+}
+
+.intro-experience.is-exiting .intro-canvas-shell {
+  transform: scale(1.03);
+  filter: blur(10px);
+}
+
+.intro-experience.is-exiting .intro-overlay,
+.intro-experience.is-exiting .intro-blackframe {
+  transform: translateY(-10px);
+}
+
 .intro-blackframe,
 .intro-canvas-shell,
 .intro-overlay,
@@ -83,6 +99,12 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-end;
+}
+
+.intro-kicker,
+.intro-brand,
+.intro-subcopy {
+  will-change: transform, opacity, filter;
 }
 
 .intro-scooter-image {
