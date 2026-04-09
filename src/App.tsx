@@ -119,25 +119,41 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function HomePage() {
   const ref = useReveal()
+  const featured = scooters.slice(0, 3)
 
   return (
     <div ref={ref}>
       <section className="hero-card hero-animated" data-animate="fade-up">
-        <div className="hero-grid hero-grid-single">
+        <div className="hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow" data-animate="fade-up">MotoCity</p>
-            <h1 data-animate="fade-up">Un showroom prêt pour 30 scooters et plus</h1>
+            <p className="eyebrow" data-animate="fade-up">MotoCity showroom</p>
+            <h1 data-animate="fade-up">Des scooters urbains, sport et premium dans une mise en scène plus claire et plus désirable</h1>
             <p className="lead" data-animate="fade-up">
-              Base scalable avec navigation réelle par page, marques, catégories et fiches produits.
-              Idéal pour agrandir facilement ton catalogue.
+              Explore les modèles, compare les fiches et découvre les marques MotoCity dans une ambiance showroom plus haut de gamme.
             </p>
+            <div className="hero-stats" data-animate="fade-up">
+              <div className="hero-stat"><strong>{scooters.length}+</strong><span>modèles</span></div>
+              <div className="hero-stat"><strong>{scooterBrands.length}</strong><span>marques</span></div>
+              <div className="hero-stat"><strong>2</strong><span>modes de comparaison</span></div>
+            </div>
             <div className="cta-row" data-animate="fade-up">
-              <NavLink className="primary-button animated-button" to="/scooters">Voir le catalogue</NavLink>
-              <NavLink className="secondary-button" to="/comparaison">Comparer les scooters</NavLink>
+              <NavLink className="primary-button animated-button" to="/scooters">Voir les modèles</NavLink>
+              <NavLink className="secondary-button" to="/comparaison">Comparer</NavLink>
             </div>
           </div>
-          <div className="hero-loader" data-animate="fade-up">
-            <div className="hero-static-orb" />
+
+          <div className="hero-showcase" data-animate="fade-up">
+            <div className="hero-showcase-glow" />
+            <img src={featured[0]?.image} alt={featured[0]?.name} className="hero-scooter-main" />
+            <div className="hero-floating-card hero-floating-card-top">
+              <span className="pill pill-soft">Vedette</span>
+              <h3>{featured[0]?.name}</h3>
+              <p>{featured[0]?.brand}</p>
+            </div>
+            <div className="hero-floating-card hero-floating-card-bottom">
+              <p className="hero-floating-label">Comparaison rapide</p>
+              <strong>Choisis 2 scooters et compare leurs specs</strong>
+            </div>
           </div>
         </div>
       </section>
@@ -145,18 +161,25 @@ function HomePage() {
       <section className="section-block" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Marques</p>
-          <h2>Organise ton showroom par société ou marque</h2>
+          <h2>Explore le showroom par marque</h2>
         </div>
         <div className="cards-grid brand-grid">
-          {scooterBrands.map((brand) => (
-            <NavLink key={brand.id} to={`/marques/${brand.id}`} className="brand-card-link" data-animate="fade-up">
-              <article className="product-card hover-card">
-                <span className="pill">{brand.company}</span>
-                <h3>{brand.name}</h3>
-                <p>{brand.description}</p>
-              </article>
-            </NavLink>
-          ))}
+          {scooterBrands.map((brand) => {
+            const count = scooters.filter((item) => item.brand.toLowerCase() === brand.name.toLowerCase()).length
+            return (
+              <NavLink key={brand.id} to={`/marques/${brand.id}`} className="brand-card-link" data-animate="fade-up">
+                <article className="product-card brand-card hover-card">
+                  <span className="pill">{brand.company}</span>
+                  <h3>{brand.name}</h3>
+                  <p>{brand.description}</p>
+                  <div className="brand-card-footer">
+                    <strong>{count} modèles</strong>
+                    <span>Voir la gamme</span>
+                  </div>
+                </article>
+              </NavLink>
+            )
+          })}
         </div>
       </section>
     </div>
