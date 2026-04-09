@@ -640,6 +640,16 @@ h3 { font-size: 1.35rem; }
   gap: 10px;
 }
 
+.contact-link {
+  color: var(--gold-soft);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.contact-link:hover {
+  text-decoration: underline;
+}
+
 .contact-card-cta {
   align-content: space-between;
 }

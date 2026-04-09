@@ -216,6 +216,27 @@ function HomePage() {
         </div>
       </section>
 
+      <section className="section-block" data-animate="fade-up">
+        <div className="section-heading">
+          <p className="eyebrow">Facilités</p>
+          <h2>Des solutions de paiement adaptées</h2>
+        </div>
+        <div className="cards-grid value-grid">
+          <article className="product-card hover-card">
+            <h3>Paiement par facilité</h3>
+            <p>Des offres régulièrement communiquées sur les réseaux du showroom selon les modèles.</p>
+          </article>
+          <article className="product-card hover-card">
+            <h3>Accompagnement en showroom</h3>
+            <p>Échange direct sur les modèles, les disponibilités et les conditions de vente.</p>
+          </article>
+          <article className="product-card hover-card">
+            <h3>Contact rapide</h3>
+            <p>Appel, message ou visite sur place pour demander prix, stock et modalités.</p>
+          </article>
+        </div>
+      </section>
+
       <section className="section-block contact-section" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Visite showroom</p>
@@ -226,6 +247,7 @@ function HomePage() {
             <h3>Adresse</h3>
             <p>Sahline, route Jammel, Tunisie</p>
             <p>Showroom moto, scooter et accessoires avec activité locale réelle.</p>
+            <a className="secondary-button" href="https://www.google.com/maps/search/?api=1&query=Moto+City+Sahline+Route+Jammel" target="_blank" rel="noreferrer">Voir la localisation</a>
           </div>
           <div className="contact-card">
             <h3>Téléphone</h3>
@@ -240,8 +262,8 @@ function HomePage() {
           </div>
           <div className="contact-card">
             <h3>Réseaux sociaux</h3>
-            <p>Facebook : Moto City</p>
-            <p>Instagram : @motocitys</p>
+            <a className="contact-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook Moto City</a>
+            <a className="contact-link" href="https://www.instagram.com/motocitys/" target="_blank" rel="noreferrer">Instagram @motocitys</a>
             <p>Communication active, offres et contenu showroom.</p>
           </div>
           <div className="contact-card contact-card-cta">
