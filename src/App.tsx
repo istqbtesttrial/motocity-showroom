@@ -1,5 +1,6 @@
 import './App.css'
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import type { FormEvent } from 'react'
 import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { scooterBrands, scooters, categories } from './data'
@@ -129,6 +130,22 @@ function Shell({ children }: { children: React.ReactNode }) {
 function HomePage() {
   const ref = useReveal()
   const featured = scooters.slice(0, 3)
+  const [vehicleFilter, setVehicleFilter] = useState<'Tous' | 'Scooter' | 'Moto' | 'Électrique'>('Tous')
+  const [selectedModel, setSelectedModel] = useState(featured[0]?.id ?? '')
+  const [reservationSent, setReservationSent] = useState(false)
+
+  const filteredModels = useMemo(() => {
+    if (vehicleFilter === 'Tous' || vehicleFilter === 'Scooter') return scooters
+    if (vehicleFilter === 'Moto') return scooters.filter((item) => item.category.toLowerCase().includes('sport'))
+    return []
+  }, [vehicleFilter])
+
+  const selectedScooter = filteredModels.find((item) => item.id === selectedModel) ?? filteredModels[0] ?? scooters[0]
+
+  const handleReservation = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    setReservationSent(true)
+  }
 
   return (
     <div ref={ref}>
@@ -145,9 +162,25 @@ function HomePage() {
               <div className="hero-stat"><strong>{scooterBrands.length}</strong><span>marques</span></div>
               <div className="hero-stat"><strong>2</strong><span>modes de comparaison</span></div>
             </div>
+            <div className="hero-filter-row" data-animate="fade-up">
+              {['Tous', 'Scooter', 'Moto', 'Électrique'].map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className={`filter-chip ${vehicleFilter === type ? 'active' : ''}`}
+                  onClick={() => {
+                    setVehicleFilter(type as 'Tous' | 'Scooter' | 'Moto' | 'Électrique')
+                    setSelectedModel((vehicleFilter === type ? selectedModel : (type === 'Moto' ? scooters.find((item) => item.category.toLowerCase().includes('sport'))?.id : scooters[0]?.id)) ?? scooters[0]?.id ?? '')
+                  }}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
             <div className="cta-row" data-animate="fade-up">
               <NavLink className="primary-button animated-button" to="/scooters">Voir les modèles</NavLink>
               <NavLink className="secondary-button" to="/comparaison">Comparer les scooters</NavLink>
+              <a className="secondary-button" href="#contact">Réserver un essai</a>
             </div>
           </div>
 
@@ -156,8 +189,8 @@ function HomePage() {
             <img src={featured[0]?.image} alt={featured[0]?.name} className="hero-scooter-main" />
             <div className="hero-floating-card hero-floating-card-top">
               <span className="pill pill-soft">Vedette</span>
-              <h3>{featured[0]?.name}</h3>
-              <p>{featured[0]?.brand}</p>
+              <h3>{selectedScooter?.name}</h3>
+              <p>{selectedScooter?.brand}</p>
             </div>
             <div className="hero-floating-card hero-floating-card-bottom">
               <p className="hero-floating-label">Comparaison rapide</p>
@@ -170,10 +203,24 @@ function HomePage() {
       <section className="section-block section-anchor" id="models" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Modèles</p>
-          <h2>Quelques scooters à découvrir</h2>
+          <h2>Découvrir les modèles</h2>
+        </div>
+        <div className="model-picker-bar">
+          <label className="picker-field inline-picker">
+            <span>Choisir un modèle</span>
+            <select value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)}>
+              {filteredModels.map((scooter) => (
+                <option key={scooter.id} value={scooter.id}>{scooter.name}</option>
+              ))}
+            </select>
+          </label>
+          <div className="model-picker-actions">
+            {selectedScooter ? <NavLink className="primary-button animated-button" to={`/scooters/${selectedScooter.id}`}>Voir détails</NavLink> : null}
+            <a className="secondary-button" href="#contact">Réserver un essai</a>
+          </div>
         </div>
         <div className="cards-grid scooters-grid home-models-grid">
-          {featured.map((scooter) => (
+          {filteredModels.slice(0, 6).map((scooter) => (
             <ProductCard key={scooter.id} scooter={scooter} detailLink={`/scooters/${scooter.id}`} />
           ))}
         </div>
@@ -281,6 +328,18 @@ function HomePage() {
             <p>Réserve une visite showroom ou appelle directement pour les modèles disponibles.</p>
             <a className="primary-button animated-button" href="tel:+21624969063">Appeler maintenant</a>
           </div>
+          <form className="contact-card contact-form-card" onSubmit={handleReservation}>
+            <h3>Réserver un essai</h3>
+            <input className="contact-input" type="text" name="name" placeholder="Nom" required />
+            <input className="contact-input" type="tel" name="phone" placeholder="Téléphone" required />
+            <select className="contact-input" name="model" defaultValue={selectedScooter?.id ?? ''}>
+              {scooters.map((scooter) => (
+                <option key={scooter.id} value={scooter.id}>{scooter.name}</option>
+              ))}
+            </select>
+            <button type="submit" className="primary-button animated-button">Envoyer la demande</button>
+            {reservationSent ? <p className="form-success">Demande envoyée. Le showroom peut te recontacter pour confirmer.</p> : null}
+          </form>
         </div>
       </section>
     </div>
