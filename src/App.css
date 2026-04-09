@@ -627,6 +627,10 @@ h3 { font-size: 1.35rem; }
   gap: 18px;
 }
 
+.contact-section .section-heading {
+  max-width: 720px;
+}
+
 .contact-card {
   border-radius: 24px;
   padding: 22px;

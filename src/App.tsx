@@ -219,23 +219,35 @@ function HomePage() {
       <section className="section-block contact-section" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Visite showroom</p>
-          <h2>Prendre contact avec MotoCity</h2>
+          <h2>Moto City Sahline, route Jammel</h2>
         </div>
         <div className="contact-grid">
           <div className="contact-card">
-            <h3>Showroom</h3>
-            <p>Tunis, Tunisie</p>
-            <p>Ouvert pour découverte modèles et comparaison sur place.</p>
+            <h3>Adresse</h3>
+            <p>Sahline, route Jammel, Tunisie</p>
+            <p>Showroom moto, scooter et accessoires avec activité locale réelle.</p>
           </div>
           <div className="contact-card">
             <h3>Téléphone</h3>
-            <p>+216 00 000 000</p>
+            <p>+216 24 969 063</p>
+            <p>+216 54 914 615</p>
             <p>Contact rapide pour disponibilité, prix et renseignements.</p>
           </div>
+          <div className="contact-card">
+            <h3>Email</h3>
+            <p>stemongicity@gmail.com</p>
+            <p>Pour demandes, informations et suivi.</p>
+          </div>
+          <div className="contact-card">
+            <h3>Réseaux sociaux</h3>
+            <p>Facebook : Moto City</p>
+            <p>Instagram : @motocitys</p>
+            <p>Communication active, offres et contenu showroom.</p>
+          </div>
           <div className="contact-card contact-card-cta">
-            <h3>Essai & visite</h3>
-            <p>Réserve une visite showroom ou un essai selon les modèles disponibles.</p>
-            <a className="primary-button animated-button" href="tel:+21600000000">Réserver un essai</a>
+            <h3>Visite & essai</h3>
+            <p>Réserve une visite showroom ou appelle directement pour les modèles disponibles.</p>
+            <a className="primary-button animated-button" href="tel:+21624969063">Appeler maintenant</a>
           </div>
         </div>
       </section>
