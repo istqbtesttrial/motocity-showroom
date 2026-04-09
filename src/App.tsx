@@ -262,7 +262,7 @@ function HomePage() {
           </div>
           <div className="contact-card">
             <h3>Réseaux sociaux</h3>
-            <a className="contact-link" href="https://www.facebook.com/" target="_blank" rel="noreferrer">Facebook Moto City</a>
+            <a className="contact-link" href="https://www.facebook.com/share/17xJmTFT18/" target="_blank" rel="noreferrer">Facebook Moto City</a>
             <a className="contact-link" href="https://www.instagram.com/motocitys/" target="_blank" rel="noreferrer">Instagram @motocitys</a>
             <a className="contact-link" href="https://www.tiktok.com/@motocity25?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGnMHTxcGE4PhZe8QhtL10neXEkEyUH2EqShDFZKP1zsOVyOn571bsCbHzfWQI_aem_dQPEFQ6CClbTBcdT-7ErWg" target="_blank" rel="noreferrer">TikTok @motocity25</a>
             <p>Communication active, offres et contenu showroom.</p>
