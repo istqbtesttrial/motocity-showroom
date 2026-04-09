@@ -62,8 +62,8 @@ function Shell({ children }: { children: React.ReactNode }) {
           <div className="brand-block">
             <div className="brand-mark interactive-mark">MC</div>
             <div>
-              <p className="eyebrow">MotoCity</p>
-              <h2 className="sidebar-title">Showroom</h2>
+              <p className="eyebrow">MotoCity Tunisie</p>
+              <h2 className="sidebar-title">Showroom scooters</h2>
             </div>
           </div>
           <nav className="mobile-quicknav">
@@ -77,8 +77,8 @@ function Shell({ children }: { children: React.ReactNode }) {
           <div className="brand-block brand-block-sidebar">
             <div className="brand-mark interactive-mark">MC</div>
             <div>
-              <p className="eyebrow">MotoCity</p>
-              <h2 className="sidebar-title">Showroom navigation</h2>
+              <p className="eyebrow">MotoCity Tunisie</p>
+              <h2 className="sidebar-title">Showroom scooters</h2>
             </div>
           </div>
 
@@ -87,8 +87,8 @@ function Shell({ children }: { children: React.ReactNode }) {
               <p className="nav-group-title">Pages</p>
               <NavLink to="/" end className="nav-item">Accueil</NavLink>
               <NavLink to="/scooters" className="nav-item">Tous les scooters</NavLink>
-              <NavLink to="/comparaison" className="nav-item">Comparaison</NavLink>
-              <NavLink to="/articles" className="nav-item">Autres articles</NavLink>
+              <NavLink to="/comparaison" className="nav-item">Comparer les scooters</NavLink>
+              <NavLink to="/articles" className="nav-item">Conseils & articles</NavLink>
             </div>
 
             <div>
@@ -126,10 +126,10 @@ function HomePage() {
       <section className="hero-card hero-animated" data-animate="fade-up">
         <div className="hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow" data-animate="fade-up">MotoCity showroom</p>
-            <h1 data-animate="fade-up">Des scooters urbains, sport et premium dans une mise en scène plus claire et plus désirable</h1>
+            <p className="eyebrow" data-animate="fade-up">Showroom tunisien de scooters</p>
+            <h1 data-animate="fade-up">MotoCity, showroom de scooters en Tunisie</h1>
             <p className="lead" data-animate="fade-up">
-              Explore les modèles, compare les fiches et découvre les marques MotoCity dans une ambiance showroom plus haut de gamme.
+              Découvre les modèles disponibles, explore les marques et compare les scooters selon ton usage, ville, sport ou premium.
             </p>
             <div className="hero-stats" data-animate="fade-up">
               <div className="hero-stat"><strong>{scooters.length}+</strong><span>modèles</span></div>
@@ -138,7 +138,7 @@ function HomePage() {
             </div>
             <div className="cta-row" data-animate="fade-up">
               <NavLink className="primary-button animated-button" to="/scooters">Voir les modèles</NavLink>
-              <NavLink className="secondary-button" to="/comparaison">Comparer</NavLink>
+              <NavLink className="secondary-button" to="/comparaison">Comparer les scooters</NavLink>
             </div>
           </div>
 
@@ -152,7 +152,7 @@ function HomePage() {
             </div>
             <div className="hero-floating-card hero-floating-card-bottom">
               <p className="hero-floating-label">Comparaison rapide</p>
-              <strong>Choisis 2 scooters et compare leurs specs</strong>
+              <strong>Choisis 2 scooters et compare leurs fiches</strong>
             </div>
           </div>
         </div>
@@ -161,7 +161,7 @@ function HomePage() {
       <section className="section-block" data-animate="fade-up">
         <div className="section-heading">
           <p className="eyebrow">Marques</p>
-          <h2>Explore le showroom par marque</h2>
+          <h2>Explorer les scooters par marque</h2>
         </div>
         <div className="cards-grid brand-grid">
           {scooterBrands.map((brand) => {
@@ -214,8 +214,8 @@ function ScootersPage() {
   return (
     <section className="section-block" ref={ref}>
       <div className="section-heading" data-animate="fade-up">
-        <p className="eyebrow">Catalogue</p>
-        <h2>Tous les scooters</h2>
+        <p className="eyebrow">Catalogue scooters</p>
+        <h2>Tous les scooters disponibles</h2>
       </div>
       <div className="cards-grid scooters-grid">
         {scooters.map((scooter) => (
@@ -269,7 +269,7 @@ function ScooterDetailPage() {
             {scooter.price ? <p className="price-tag detail-price">{scooter.price} DT</p> : <p className="price-tag detail-price price-muted">Prix à confirmer</p>}
             {scooter.confidence ? <span className={`confidence-badge confidence-${scooter.confidence}`}>{scooter.confidence}</span> : null}
           </div>
-          <p className="eyebrow">Caractéristiques</p>
+          <p className="eyebrow">Fiche scooter</p>
           <ul className="spec-list big-spec-list">
             {scooter.specs.map((spec) => (
               <li key={spec}>{spec}</li>
@@ -293,7 +293,7 @@ function ComparisonPage() {
   return (
     <section className="section-block" ref={ref}>
       <div className="section-heading" data-animate="fade-up">
-        <p className="eyebrow">Comparaison</p>
+        <p className="eyebrow">Comparer les scooters</p>
         <h2>Sélection manuelle de 2 scooters</h2>
       </div>
 
@@ -350,7 +350,7 @@ function ArticlesPage() {
   return (
     <section className="section-block" ref={ref}>
       <div className="section-heading" data-animate="fade-up">
-        <p className="eyebrow">Autres articles</p>
+        <p className="eyebrow">Conseils & articles</p>
         <h2>Zone prête pour équipements, accessoires et pièces</h2>
       </div>
       <div className="cards-grid brand-grid">
